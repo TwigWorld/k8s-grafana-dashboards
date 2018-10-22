@@ -2072,7 +2072,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(delta(kube_pod_container_status_restarts_total{namespace=\"kube-system\"}[30m]))",
+          "expr": "sum(delta(kube_pod_container_status_restarts_total{namespace=~\"$namespace\"}[30m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -2412,7 +2412,7 @@
         }
       ],
       "thresholds": "",
-      "title": "Jobs Succeeded",
+      "title": "Jobs Active",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
