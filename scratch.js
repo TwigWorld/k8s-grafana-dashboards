@@ -49,3 +49,9 @@ sum(container_memory_usage_bytes{namespace="$deployment_namespace",pod_name=~"$d
 
 // Memory usage per pod
 sum(container_memory_usage_bytes{namespace="$deployment_namespace",pod_name=~"$deployment_name.*"}) / min(kube_deployment_status_replicas_available{deployment="$deployment_name",namespace="$deployment_namespace"}) / 1024^2
+
+// CPU requests total
+avg(kube_pod_container_resource_requests_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {label_release="ts-twig-graph"}) * 1000
+
+// CPU usage total (unsure on this one)
+sum(container_cpu_usage_seconds_total{pod_name=~"$deployment_name.*", namespace="$deployment_namespace"})
