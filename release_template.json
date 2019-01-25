@@ -17,7 +17,7 @@
   "gnetId": 3137,
   "graphTooltip": 1,
   "id": 1,
-  "iteration": 1548408568161,
+  "iteration": 1548408568165,
   "links": [],
   "panels": [
     {
@@ -760,7 +760,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"ts-twig-graph-twig-graph.*\", namespace=\"production\"}[5m])) * 10000",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"$deployment_name.*\", namespace=\"$deployment_namespace\"}[5m])) * 10000",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -844,12 +844,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {label_release=\"ts-twig-graph\"}) * 1000",
+          "expr": "sum(kube_pod_container_resource_requests_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {pod=~\"$deployment_name.*\"}) * 1000",
           "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": "",
@@ -929,12 +927,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_limits_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {label_release=\"ts-twig-graph\"}) * 1000",
+          "expr": "sum(kube_pod_container_resource_limits_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {pod=~\"$deployment_name.*\"}) * 1000",
           "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": "",
@@ -1014,7 +1010,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"ts-twig-graph-twig-graph.*\", namespace=\"production\"}[5m])) * 10000 / (sum(kube_pod_container_resource_requests_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {label_release=\"ts-twig-graph\"}) * 1000))*100",
+          "expr": "(sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"$deployment_name.*\", namespace=\"$deployment_namespace\"}[5m])) * 10000 / (sum(kube_pod_container_resource_requests_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {pod=~\"$deployment_name.*\"}) * 1000))*100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "C"
@@ -1097,7 +1093,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"ts-twig-graph-twig-graph.*\", namespace=\"production\"}[5m])) * 10000 / (sum(kube_pod_container_resource_limits_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {label_release=\"ts-twig-graph\"}) * 1000) * 100",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"$deployment_name.*\", namespace=\"$deployment_namespace\"}[5m])) * 10000 / (sum(kube_pod_container_resource_limits_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {pod=~\"$deployment_name.*\"}) * 1000) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "refId": "A",
@@ -1181,7 +1177,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "avg(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"ts-twig-graph-twig-graph.*\", namespace=\"production\"}[5m])) * 10000",
+          "expr": "avg(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"$deployment_name.*\", namespace=\"$deployment_namespace\"}[5m])) * 10000",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1266,7 +1262,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "avg(kube_pod_container_resource_requests_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {label_release=\"ts-twig-graph\"}) * 1000",
+          "expr": "avg(kube_pod_container_resource_requests_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {pod=~\"$deployment_name.*\"}) * 1000",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1351,7 +1347,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "avg(kube_pod_container_resource_limits_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {label_release=\"ts-twig-graph\"}) * 1000",
+          "expr": "avg(kube_pod_container_resource_limits_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {pod=~\"$deployment_name.*\"}) * 1000",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -2448,5 +2444,5 @@
   "timezone": "browser",
   "title": "Kubernetes Deployment 2",
   "uid": "fMQue0xmz",
-  "version": 15
+  "version": 16
 }
