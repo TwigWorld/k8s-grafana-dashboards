@@ -17,7 +17,7 @@
   "gnetId": 3137,
   "graphTooltip": 1,
   "id": 1,
-  "iteration": 1548337461914,
+  "iteration": 1548408568161,
   "links": [],
   "panels": [
     {
@@ -760,12 +760,11 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(container_spec_cpu_shares{namespace=\"$deployment_namespace\", pod_name=~\"$deployment_name.*\"}) / 100",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"ts-twig-graph-twig-graph.*\", namespace=\"production\"}[5m])) * 10000",
           "format": "time_series",
           "hide": false,
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
+          "intervalFactor": 1,
+          "refId": "A"
         }
       ],
       "thresholds": "",
@@ -1015,7 +1014,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(sum(container_cpu_usage_seconds_total{pod_name=~\"$deployment_name.*\", namespace=\"$deployment_namespace\"}) / (sum(kube_pod_container_resource_requests_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {label_release=\"ts-twig-graph\"}) * 1000))*100",
+          "expr": "(sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"ts-twig-graph-twig-graph.*\", namespace=\"production\"}[5m])) * 10000 / (sum(kube_pod_container_resource_requests_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {label_release=\"ts-twig-graph\"}) * 1000))*100",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "C"
@@ -1098,7 +1097,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(container_cpu_usage_seconds_total{pod_name=~\"$deployment_name.*\", namespace=\"$deployment_namespace\"}) / (sum(kube_pod_container_resource_limits_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {label_release=\"ts-twig-graph\"}) * 1000) * 100",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"ts-twig-graph-twig-graph.*\", namespace=\"production\"}[5m])) * 10000 / (sum(kube_pod_container_resource_limits_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {label_release=\"ts-twig-graph\"}) * 1000) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "refId": "A",
@@ -1182,7 +1181,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(container_cpu_usage_seconds_total)",
+          "expr": "avg(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"ts-twig-graph-twig-graph.*\", namespace=\"production\"}[5m])) * 10000",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -2017,7 +2016,7 @@
       "dashes": false,
       "fill": 1,
       "gridPos": {
-        "h": 9,
+        "h": 15,
         "w": 12,
         "x": 0,
         "y": 33
@@ -2051,6 +2050,13 @@
           "hide": false,
           "intervalFactor": 1,
           "refId": "A"
+        },
+        {
+          "expr": "avg(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"ts-twig-graph-twig-graph-6f7db67465-2cwfw\", namespace=\"production\"}[5m]) * 100) by (pod_name)",
+          "format": "time_series",
+          "hide": true,
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -2106,6 +2112,91 @@
       "datasource": "Prometheus",
       "editable": true,
       "error": false,
+      "format": "Bps",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": false
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 33
+      },
+      "id": 7,
+      "interval": null,
+      "isNew": true,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(rate(container_network_transmit_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name.*\"}[3m])) + sum(rate(container_network_receive_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name.*\"}[3m]))",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 2,
+          "refId": "A",
+          "step": 600
+        }
+      ],
+      "thresholds": "",
+      "title": "Network",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "datasource": "Prometheus",
+      "editable": true,
+      "error": false,
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -2118,7 +2209,7 @@
         "h": 3,
         "w": 6,
         "x": 12,
-        "y": 33
+        "y": 42
       },
       "id": 3,
       "interval": null,
@@ -2202,7 +2293,7 @@
         "h": 3,
         "w": 6,
         "x": 12,
-        "y": 36
+        "y": 45
       },
       "id": 2,
       "interval": null,
@@ -2261,89 +2352,6 @@
         }
       ],
       "valueName": "avg"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "Prometheus",
-      "editable": true,
-      "error": false,
-      "format": "Bps",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": false
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 8,
-        "x": 0,
-        "y": 42
-      },
-      "id": 7,
-      "interval": null,
-      "isNew": true,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "sum(rate(container_network_transmit_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name.*\"}[3m])) + sum(rate(container_network_receive_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name.*\"}[3m])) ",
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
-        }
-      ],
-      "thresholds": "",
-      "title": "Network",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
     }
   ],
   "refresh": false,
@@ -2357,7 +2365,7 @@
       {
         "allValue": ".*",
         "current": {
-          "selected": false,
+          "tags": [],
           "text": "production",
           "value": "production"
         },
@@ -2383,7 +2391,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "tags": [],
           "text": "ts-twig-graph-twig-graph",
           "value": "ts-twig-graph-twig-graph"
         },
@@ -2409,8 +2417,8 @@
     ]
   },
   "time": {
-    "from": "2019-01-24T06:33:35.431Z",
-    "to": "2019-01-24T18:33:35.435Z"
+    "from": "2019-01-25T00:49:30.600Z",
+    "to": "2019-01-25T12:49:30.600Z"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -2440,5 +2448,5 @@
   "timezone": "browser",
   "title": "Kubernetes Deployment 2",
   "uid": "fMQue0xmz",
-  "version": 14
+  "version": 15
 }
