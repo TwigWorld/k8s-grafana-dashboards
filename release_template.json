@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": 3137,
   "graphTooltip": 1,
-  "id": 2,
-  "iteration": 1548422802719,
+  "id": 1,
+  "iteration": 1548679970455,
   "links": [],
   "panels": [
     {
@@ -2278,12 +2278,97 @@
         "thresholdMarkers": false
       },
       "gridPos": {
-        "h": 9,
-        "w": 12,
+        "h": 3,
+        "w": 6,
         "x": 12,
         "y": 33
       },
       "id": 7,
+      "interval": null,
+      "isNew": true,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(rate(container_network_receive_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}[3m]))",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 2,
+          "refId": "A",
+          "step": 600
+        }
+      ],
+      "thresholds": "",
+      "title": "Network Inbound",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "datasource": "Prometheus",
+      "editable": true,
+      "error": false,
+      "format": "Bps",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": false
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 33
+      },
+      "id": 38,
       "interval": null,
       "isNew": true,
       "links": [],
@@ -2330,7 +2415,7 @@
         }
       ],
       "thresholds": "",
-      "title": "Network",
+      "title": "Network Combined",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -2354,21 +2439,21 @@
       "datasource": "Prometheus",
       "editable": true,
       "error": false,
-      "format": "none",
+      "format": "Bps",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
         "show": false,
         "thresholdLabels": false,
-        "thresholdMarkers": true
+        "thresholdMarkers": false
       },
       "gridPos": {
         "h": 3,
         "w": 6,
         "x": 12,
-        "y": 42
+        "y": 36
       },
-      "id": 3,
+      "id": 39,
       "interval": null,
       "isNew": true,
       "links": [],
@@ -2401,21 +2486,21 @@
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": false
+        "show": true
       },
       "tableColumn": "",
       "targets": [
         {
-          "expr": "max(kube_deployment_status_observed_generation{deployment=\"$deployment_name\",namespace=\"$deployment_namespace\"}) without (instance, pod)",
+          "expr": "sum(rate(container_network_transmit_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}[3m])) ",
           "format": "time_series",
+          "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "",
           "refId": "A",
           "step": 600
         }
       ],
       "thresholds": "",
-      "title": "Observed Generation",
+      "title": "Network Outbound",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -2451,7 +2536,7 @@
         "h": 3,
         "w": 6,
         "x": 12,
-        "y": 45
+        "y": 39
       },
       "id": 2,
       "interval": null,
@@ -2511,6 +2596,91 @@
         }
       ],
       "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "datasource": "Prometheus",
+      "editable": true,
+      "error": false,
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 18,
+        "y": 39
+      },
+      "id": 3,
+      "interval": null,
+      "isNew": true,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "max(kube_deployment_status_observed_generation{deployment=\"$deployment_name\",namespace=\"$deployment_namespace\"}) without (instance, pod)",
+          "format": "time_series",
+          "intervalFactor": 2,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 600
+        }
+      ],
+      "thresholds": "",
+      "title": "Observed Generation",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
     }
   ],
   "refresh": false,
@@ -2524,9 +2694,9 @@
       {
         "allValue": ".*",
         "current": {
-          "tags": [],
-          "text": "staging",
-          "value": "staging"
+          "selected": false,
+          "text": "production",
+          "value": "production"
         },
         "datasource": "Prometheus",
         "definition": "",
@@ -2550,9 +2720,9 @@
       {
         "allValue": null,
         "current": {
-          "tags": [],
-          "text": "staging-tocs-tocs",
-          "value": "staging-tocs-tocs"
+          "selected": false,
+          "text": "ts-twig-graph-twig-graph",
+          "value": "ts-twig-graph-twig-graph"
         },
         "datasource": "Prometheus",
         "definition": "",
@@ -2607,5 +2777,5 @@
   "timezone": "browser",
   "title": "Kubernetes Deployment 2",
   "uid": "fMQue0xmz",
-  "version": 7
+  "version": 18
 }

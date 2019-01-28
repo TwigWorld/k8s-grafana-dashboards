@@ -64,3 +64,11 @@ sum(container_cpu_usage_seconds_total{pod_name=~"$deployment_name.*", namespace=
 
 
 sum(kube_pod_container_resource_requests_memory_bytes{namespace="$deployment_namespace",pod=~"$deployment_name-[a-z0-9]+-[a-z0-9]+$"}) / 1024^2
+
+
+
+
+
+
+
+sum(container_memory_usage_bytes{namespace="$deployment_namespace",pod_name=~"$deployment_name-[a-z0-9]+-[a-z0-9]+$"}) / sum(kube_pod_container_resource_requests_memory_bytes{namespace="$deployment_namespace",pod=~"$deployment_name-[a-z0-9]+-[a-z0-9]+$"}) * 100
