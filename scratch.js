@@ -72,3 +72,11 @@ sum(kube_pod_container_resource_requests_memory_bytes{namespace="$deployment_nam
 
 
 sum(container_memory_usage_bytes{namespace="$deployment_namespace",pod_name=~"$deployment_name-[a-z0-9]+-[a-z0-9]+$"}) / sum(kube_pod_container_resource_requests_memory_bytes{namespace="$deployment_namespace",pod=~"$deployment_name-[a-z0-9]+-[a-z0-9]+$"}) * 100
+
+
+
+
+// Joins are really hard
+// https://github.com/kubernetes/kube-state-metrics/issues/137
+sum(kube_pod_info) by(pod,namespace) * on(pod, namespace) group_right() kube_pod_labels
+sum(kube_pod_status_phase) by(pod,namespace) * on(pod, namespace) group_right() kube_pod_labels {label_release="tsc-article-notes-svc"}
