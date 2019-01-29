@@ -80,3 +80,11 @@ sum(container_memory_usage_bytes{namespace="$deployment_namespace",pod_name=~"$d
 // https://github.com/kubernetes/kube-state-metrics/issues/137
 sum(kube_pod_info) by(pod,namespace) * on(pod, namespace) group_right() kube_pod_labels
 sum(kube_pod_status_phase) by(pod,namespace) * on(pod, namespace) group_right() kube_pod_labels {label_release="tsc-article-notes-svc"}
+
+
+
+
+
+kube_pod_labels{label_release="ts-authentication-service"}
+
+kube_pod_labels{app="prometheus",chart="prometheus-8.4.5",component="kube-state-metrics",heritage="Tiller",instance="192.168.194.170:8080",job="kubernetes-service-endpoints",kubernetes_name="prometheus-kube-state-metrics",kubernetes_namespace="kube-system",kubernetes_node="ip-192-168-193-171.us-west-2.compute.internal",label_app="authentication-service",label_pod_template_hash="1140428334",label_release="ts-authentication-service",namespace="production",pod="ts-authentication-service-authentication-service-558486d772rms8",release="prometheus"}
