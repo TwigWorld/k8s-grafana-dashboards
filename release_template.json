@@ -17,7 +17,7 @@
   "gnetId": 3137,
   "graphTooltip": 1,
   "id": 1,
-  "iteration": 1548865648206,
+  "iteration": 1548865648218,
   "links": [],
   "panels": [
     {
@@ -32,533 +32,16 @@
       "type": "row"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "Prometheus",
-      "decimals": 2,
-      "editable": true,
-      "error": false,
-      "format": "bytes",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 4,
-        "x": 0,
-        "y": 1
-      },
-      "id": 9,
-      "interval": null,
-      "isNew": true,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "80%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "sum(container_memory_usage_bytes{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / 1024^2",
-          "format": "time_series",
-          "hide": true,
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
-        },
-        {
-          "expr": "sum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes\n)",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "B"
-        }
-      ],
-      "thresholds": "",
-      "title": "Memory Usage Total",
-      "type": "singlestat",
-      "valueFontSize": "110%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "Prometheus",
-      "decimals": null,
-      "editable": true,
-      "error": false,
-      "format": "bytes",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 4,
-        "x": 4,
-        "y": 1
-      },
-      "id": 15,
-      "interval": null,
-      "isNew": true,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "80%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "sum(container_memory_usage_bytes{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / min(kube_deployment_status_replicas_available{deployment=\"$deployment_name\",namespace=\"$deployment_namespace\"}) / 1024^2",
-          "format": "time_series",
-          "hide": true,
-          "intervalFactor": 1,
-          "refId": "A"
-        },
-        {
-          "expr": "avg(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes {container_name!=\"POD\"}\n) ",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 1,
-          "refId": "B"
-        }
-      ],
-      "thresholds": "",
-      "title": "Memory Usage per Pod",
-      "type": "singlestat",
-      "valueFontSize": "110%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "Prometheus",
-      "editable": true,
-      "error": false,
-      "format": "bytes",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 4,
-        "x": 8,
-        "y": 1
-      },
-      "id": 10,
-      "interval": null,
-      "isNew": true,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "80%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "sum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_requests_memory_bytes\n)",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "B"
-        }
-      ],
-      "thresholds": "",
-      "title": "Memory Requests Total",
-      "type": "singlestat",
-      "valueFontSize": "110%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "Prometheus",
-      "editable": true,
-      "error": false,
-      "format": "bytes",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 12,
-        "y": 1
-      },
-      "id": 12,
-      "interval": null,
-      "isNew": true,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "80%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "sum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_limits_memory_bytes\n)",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "B"
-        }
-      ],
-      "thresholds": "",
-      "title": "Memory Limit Total",
-      "type": "singlestat",
-      "valueFontSize": "110%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "Prometheus",
-      "editable": true,
-      "error": false,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": true,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 4,
-        "x": 16,
-        "y": 1
-      },
-      "id": 11,
-      "interval": null,
-      "isNew": true,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "%",
-      "postfixFontSize": "100%",
-      "prefix": "",
-      "prefixFontSize": "80%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "sum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes\n) \n/\nsum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_requests_memory_bytes\n) * 100",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "B"
-        }
-      ],
-      "thresholds": "",
-      "title": "Memory Usage Percentage (Requests)",
-      "type": "singlestat",
-      "valueFontSize": "110%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "Prometheus",
-      "editable": true,
-      "error": false,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": true,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 4,
-        "x": 20,
-        "y": 1
-      },
-      "id": 27,
-      "interval": null,
-      "isNew": true,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "%",
-      "postfixFontSize": "100%",
-      "prefix": "",
-      "prefixFontSize": "80%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "sum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes\n) \n/\nsum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_limits_memory_bytes\n) * 100",
-          "format": "time_series",
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
-        }
-      ],
-      "thresholds": "",
-      "title": "Memory Usage Percentage (Limit)",
-      "type": "singlestat",
-      "valueFontSize": "110%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "fill": 1,
       "gridPos": {
-        "h": 7,
+        "h": 6,
         "w": 12,
         "x": 0,
-        "y": 3
+        "y": 1
       },
       "id": 35,
       "legend": {
@@ -648,6 +131,7 @@
         "rgba(50, 172, 45, 0.97)"
       ],
       "datasource": "Prometheus",
+      "decimals": 2,
       "editable": true,
       "error": false,
       "format": "bytes",
@@ -659,12 +143,12 @@
         "thresholdMarkers": true
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 4,
         "x": 12,
-        "y": 4
+        "y": 1
       },
-      "id": 16,
+      "id": 9,
       "interval": null,
       "isNew": true,
       "links": [],
@@ -697,19 +181,27 @@
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": true
+        "show": false
       },
       "tableColumn": "",
       "targets": [
         {
-          "expr": "avg(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_limits_memory_bytes\n)",
+          "expr": "sum(container_memory_usage_bytes{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / 1024^2",
+          "format": "time_series",
+          "hide": true,
+          "intervalFactor": 2,
+          "refId": "A",
+          "step": 600
+        },
+        {
+          "expr": "sum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes\n)",
           "format": "time_series",
           "intervalFactor": 1,
-          "refId": "A"
+          "refId": "B"
         }
       ],
       "thresholds": "",
-      "title": "Memory Limit Per Pod",
+      "title": "Memory Usage Total",
       "type": "singlestat",
       "valueFontSize": "110%",
       "valueMaps": [
@@ -733,21 +225,21 @@
       "datasource": "Prometheus",
       "editable": true,
       "error": false,
-      "format": "bytes",
+      "format": "none",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
-        "show": false,
+        "show": true,
         "thresholdLabels": false,
         "thresholdMarkers": true
       },
       "gridPos": {
-        "h": 5,
+        "h": 8,
         "w": 4,
-        "x": 12,
-        "y": 9
+        "x": 16,
+        "y": 1
       },
-      "id": 13,
+      "id": 11,
       "interval": null,
       "isNew": true,
       "links": [],
@@ -765,8 +257,8 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
+      "postfix": "%",
+      "postfixFontSize": "100%",
       "prefix": "",
       "prefixFontSize": "80%",
       "rangeMaps": [
@@ -780,26 +272,103 @@
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": true
+        "show": false
       },
       "tableColumn": "",
       "targets": [
         {
-          "expr": "avg(kube_pod_container_resource_requests_memory_bytes{namespace=\"$deployment_namespace\",pod=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / 1024^2",
+          "expr": "sum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes\n) \n/\nsum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_requests_memory_bytes\n) * 100",
           "format": "time_series",
-          "hide": true,
           "intervalFactor": 1,
           "refId": "B"
-        },
-        {
-          "expr": "avg(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_requests_memory_bytes\n)",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "A"
         }
       ],
       "thresholds": "",
-      "title": "Memory Requests Per Pod",
+      "title": "Memory Usage Percentage (Requests)",
+      "type": "singlestat",
+      "valueFontSize": "110%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "datasource": "Prometheus",
+      "editable": true,
+      "error": false,
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": true,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "id": 27,
+      "interval": null,
+      "isNew": true,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "%",
+      "postfixFontSize": "100%",
+      "prefix": "",
+      "prefixFontSize": "80%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes\n) \n/\nsum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_limits_memory_bytes\n) * 100",
+          "format": "time_series",
+          "intervalFactor": 2,
+          "refId": "A",
+          "step": 600
+        }
+      ],
+      "thresholds": "",
+      "title": "Memory Usage Percentage (Limit)",
       "type": "singlestat",
       "valueFontSize": "110%",
       "valueMaps": [
@@ -821,7 +390,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 10
+        "y": 7
       },
       "id": 57,
       "legend": {
@@ -908,11 +477,276 @@
       }
     },
     {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "datasource": "Prometheus",
+      "decimals": null,
+      "editable": true,
+      "error": false,
+      "format": "bytes",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 12,
+        "y": 7
+      },
+      "id": 15,
+      "interval": null,
+      "isNew": true,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "80%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(container_memory_usage_bytes{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / min(kube_deployment_status_replicas_available{deployment=\"$deployment_name\",namespace=\"$deployment_namespace\"}) / 1024^2",
+          "format": "time_series",
+          "hide": true,
+          "intervalFactor": 1,
+          "refId": "A"
+        },
+        {
+          "expr": "avg(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes {container_name!=\"POD\"}\n) ",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "refId": "B"
+        }
+      ],
+      "thresholds": "",
+      "title": "Memory Usage per Pod",
+      "type": "singlestat",
+      "valueFontSize": "110%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "datasource": "Prometheus",
+      "editable": true,
+      "error": false,
+      "format": "bytes",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 16,
+        "y": 9
+      },
+      "id": 13,
+      "interval": null,
+      "isNew": true,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "80%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "avg(kube_pod_container_resource_requests_memory_bytes{namespace=\"$deployment_namespace\",pod=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / 1024^2",
+          "format": "time_series",
+          "hide": true,
+          "intervalFactor": 1,
+          "refId": "B"
+        },
+        {
+          "expr": "avg(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_requests_memory_bytes\n)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "title": "Memory Requests Per Pod",
+      "type": "singlestat",
+      "valueFontSize": "110%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "datasource": "Prometheus",
+      "editable": true,
+      "error": false,
+      "format": "bytes",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 20,
+        "y": 9
+      },
+      "id": 16,
+      "interval": null,
+      "isNew": true,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "80%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "avg(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_limits_memory_bytes\n)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "title": "Memory Limit Per Pod",
+      "type": "singlestat",
+      "valueFontSize": "110%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 14
       },
       "id": 52,
       "title": "CPU",
@@ -928,7 +762,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 18
+        "y": 15
       },
       "id": 37,
       "legend": {
@@ -954,16 +788,11 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\", namespace=\"$deployment_namespace\"}[5m])) * 10000",
+          "expr": "sum(\n    label_replace(\n        label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n        * on (replicaset) group_left (owner_name, owner_kind)\n        kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n    )\n    * on(pod_name) group_right\n    rate(container_cpu_user_seconds_total {container_name!=\"POD\"}[5m])\n) * 1000",
           "format": "time_series",
-          "hide": true,
+          "hide": false,
           "intervalFactor": 1,
-          "refId": "A"
-        },
-        {
-          "expr": "sum(\n  irate(\n    label_replace(\n        label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n        * on (replicaset) group_left (owner_name, owner_kind)\n        kube_replicaset_owner {owner_name=\"ts-authentication-service-authentication-service\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n    )\n    * on(pod_name) group_right\n    container_cpu_usage_seconds_total {container_name!=\"POD\"}[5m]\n  )\n) ",
-          "format": "time_series",
-          "intervalFactor": 1,
+          "legendFormat": "{{pod_name}}",
           "refId": "B"
         }
       ],
@@ -992,7 +821,7 @@
           "label": "CPU (Millicores)",
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
@@ -1033,7 +862,7 @@
         "h": 3,
         "w": 4,
         "x": 12,
-        "y": 18
+        "y": 15
       },
       "id": 20,
       "interval": null,
@@ -1117,7 +946,7 @@
         "h": 9,
         "w": 4,
         "x": 16,
-        "y": 18
+        "y": 15
       },
       "id": 26,
       "interval": null,
@@ -1200,7 +1029,7 @@
         "h": 9,
         "w": 4,
         "x": 20,
-        "y": 18
+        "y": 15
       },
       "id": 28,
       "interval": null,
@@ -1284,7 +1113,7 @@
         "h": 3,
         "w": 4,
         "x": 12,
-        "y": 21
+        "y": 18
       },
       "id": 17,
       "interval": null,
@@ -1367,7 +1196,7 @@
         "h": 3,
         "w": 4,
         "x": 12,
-        "y": 24
+        "y": 21
       },
       "id": 19,
       "interval": null,
@@ -1436,7 +1265,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 27
+        "y": 24
       },
       "id": 22,
       "legend": {
@@ -1534,7 +1363,7 @@
         "h": 3,
         "w": 4,
         "x": 12,
-        "y": 27
+        "y": 24
       },
       "id": 23,
       "interval": null,
@@ -1619,7 +1448,7 @@
         "h": 3,
         "w": 4,
         "x": 12,
-        "y": 30
+        "y": 27
       },
       "id": 25,
       "interval": null,
@@ -1704,7 +1533,7 @@
         "h": 3,
         "w": 4,
         "x": 12,
-        "y": 33
+        "y": 30
       },
       "id": 24,
       "interval": null,
@@ -1771,7 +1600,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 33
       },
       "id": 50,
       "panels": [],
@@ -1788,7 +1617,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 37
+        "y": 34
       },
       "id": 40,
       "legend": {
@@ -1873,7 +1702,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 37
+        "y": 34
       },
       "id": 42,
       "legend": {
@@ -1974,7 +1803,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 45
+        "y": 42
       },
       "id": 48,
       "title": "Replicas",
@@ -2005,7 +1834,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 46
+        "y": 43
       },
       "id": 29,
       "interval": null,
@@ -2090,7 +1919,7 @@
         "h": 6,
         "w": 4,
         "x": 8,
-        "y": 46
+        "y": 43
       },
       "id": 32,
       "interval": null,
@@ -2175,7 +2004,7 @@
         "h": 3,
         "w": 8,
         "x": 12,
-        "y": 46
+        "y": 43
       },
       "id": 6,
       "interval": null,
@@ -2259,7 +2088,7 @@
         "h": 6,
         "w": 4,
         "x": 20,
-        "y": 46
+        "y": 43
       },
       "id": 33,
       "interval": null,
@@ -2345,7 +2174,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 49
+        "y": 46
       },
       "id": 31,
       "interval": null,
@@ -2431,7 +2260,7 @@
         "h": 3,
         "w": 8,
         "x": 12,
-        "y": 49
+        "y": 46
       },
       "id": 30,
       "interval": null,
@@ -2506,7 +2335,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 49
       },
       "hideTimeOverride": false,
       "id": 1,
@@ -2624,7 +2453,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 59
+        "y": 56
       },
       "id": 44,
       "panels": [],
@@ -2655,7 +2484,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 60
+        "y": 57
       },
       "id": 7,
       "interval": null,
@@ -2740,7 +2569,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 60
+        "y": 57
       },
       "id": 39,
       "interval": null,
@@ -2825,7 +2654,7 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 60
+        "y": 57
       },
       "id": 38,
       "interval": null,
@@ -2896,7 +2725,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 63
+        "y": 60
       },
       "id": 56,
       "legend": {
@@ -3103,5 +2932,5 @@
   "timezone": "browser",
   "title": "Kubernetes Deployment 2",
   "uid": "fMQue0xmz",
-  "version": 25
+  "version": 26
 }
