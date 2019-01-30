@@ -17,7 +17,7 @@
   "gnetId": 3137,
   "graphTooltip": 1,
   "id": 1,
-  "iteration": 1548865648192,
+  "iteration": 1548865648206,
   "links": [],
   "panels": [
     {
@@ -41,9 +41,10 @@
         "rgba(50, 172, 45, 0.97)"
       ],
       "datasource": "Prometheus",
+      "decimals": 2,
       "editable": true,
       "error": false,
-      "format": "none",
+      "format": "bytes",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
@@ -75,7 +76,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "postfix": "MB",
+      "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "80%",
@@ -97,9 +98,16 @@
         {
           "expr": "sum(container_memory_usage_bytes{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / 1024^2",
           "format": "time_series",
+          "hide": true,
           "intervalFactor": 2,
           "refId": "A",
           "step": 600
+        },
+        {
+          "expr": "sum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes\n)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": "",
@@ -125,9 +133,10 @@
         "rgba(50, 172, 45, 0.97)"
       ],
       "datasource": "Prometheus",
+      "decimals": null,
       "editable": true,
       "error": false,
-      "format": "none",
+      "format": "bytes",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
@@ -159,7 +168,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "postfix": "MB",
+      "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "80%",
@@ -174,15 +183,23 @@
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": false
+        "show": true
       },
       "tableColumn": "",
       "targets": [
         {
           "expr": "sum(container_memory_usage_bytes{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / min(kube_deployment_status_replicas_available{deployment=\"$deployment_name\",namespace=\"$deployment_namespace\"}) / 1024^2",
           "format": "time_series",
+          "hide": true,
           "intervalFactor": 1,
           "refId": "A"
+        },
+        {
+          "expr": "avg(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes {container_name!=\"POD\"}\n) ",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": "",
@@ -210,7 +227,7 @@
       "datasource": "Prometheus",
       "editable": true,
       "error": false,
-      "format": "none",
+      "format": "bytes",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
@@ -242,7 +259,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "postfix": "MB",
+      "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "80%",
@@ -262,12 +279,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{namespace=\"$deployment_namespace\",pod=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / 1024^2",
+          "expr": "sum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_requests_memory_bytes\n)",
           "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": "",
@@ -295,7 +310,7 @@
       "datasource": "Prometheus",
       "editable": true,
       "error": false,
-      "format": "none",
+      "format": "bytes",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
@@ -327,7 +342,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "postfix": "MB",
+      "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "80%",
@@ -347,12 +362,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(container_spec_memory_limit_bytes{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / 1024^2",
+          "expr": "sum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_limits_memory_bytes\n)",
           "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": "",
@@ -432,12 +445,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(container_memory_usage_bytes{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / sum(kube_pod_container_resource_requests_memory_bytes{namespace=\"$deployment_namespace\",pod=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) * 100",
+          "expr": "sum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes\n) \n/\nsum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_requests_memory_bytes\n) * 100",
           "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": "",
@@ -517,7 +528,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(sum(container_memory_usage_bytes{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / sum(container_spec_memory_limit_bytes{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) * 100)",
+          "expr": "sum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes\n) \n/\nsum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_limits_memory_bytes\n) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "refId": "A",
@@ -577,14 +588,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(container_memory_usage_bytes{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / 1024^2",
-          "format": "time_series",
-          "hide": true,
-          "intervalFactor": 1,
-          "refId": "A"
-        },
-        {
-          "expr": "sum (\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes\n) \n",
+          "expr": "sum (\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes {container_name!=\"POD\"}\n) \n",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -612,7 +616,7 @@
       "yaxes": [
         {
           "decimals": null,
-          "format": "decbytes",
+          "format": "bytes",
           "label": "Memory",
           "logBase": 1,
           "max": null,
@@ -646,7 +650,7 @@
       "datasource": "Prometheus",
       "editable": true,
       "error": false,
-      "format": "none",
+      "format": "bytes",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
@@ -678,7 +682,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "postfix": "MB",
+      "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "80%",
@@ -698,10 +702,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "avg(kube_pod_container_resource_limits_memory_bytes {namespace=\"$deployment_namespace\",pod=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / 1024^2",
+          "expr": "avg(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_limits_memory_bytes\n)",
           "format": "time_series",
           "intervalFactor": 1,
-          "refId": "B"
+          "refId": "A"
         }
       ],
       "thresholds": "",
@@ -729,7 +733,7 @@
       "datasource": "Prometheus",
       "editable": true,
       "error": false,
-      "format": "none",
+      "format": "bytes",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
@@ -761,7 +765,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "postfix": "MB",
+      "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "80%",
@@ -783,8 +787,15 @@
         {
           "expr": "avg(kube_pod_container_resource_requests_memory_bytes{namespace=\"$deployment_namespace\",pod=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / 1024^2",
           "format": "time_series",
+          "hide": true,
           "intervalFactor": 1,
           "refId": "B"
+        },
+        {
+          "expr": "avg(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_requests_memory_bytes\n)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A"
         }
       ],
       "thresholds": "",
@@ -841,9 +852,17 @@
         {
           "expr": "container_memory_usage_bytes{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-.*\"} / 1024^2 ",
           "format": "time_series",
+          "hide": true,
           "intervalFactor": 1,
           "legendFormat": "{{pod_name}}",
           "refId": "A"
+        },
+        {
+          "expr": "  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes {container_name!=\"POD\" }",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod_name}}",
+          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -866,11 +885,12 @@
       },
       "yaxes": [
         {
-          "format": "short",
-          "label": "Memory (MB)",
+          "decimals": null,
+          "format": "bytes",
+          "label": "Memory",
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
@@ -936,8 +956,15 @@
         {
           "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\", namespace=\"$deployment_namespace\"}[5m])) * 10000",
           "format": "time_series",
+          "hide": true,
           "intervalFactor": 1,
           "refId": "A"
+        },
+        {
+          "expr": "sum(\n  irate(\n    label_replace(\n        label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n        * on (replicaset) group_left (owner_name, owner_kind)\n        kube_replicaset_owner {owner_name=\"ts-authentication-service-authentication-service\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n    )\n    * on(pod_name) group_right\n    container_cpu_usage_seconds_total {container_name!=\"POD\"}[5m]\n  )\n) ",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -2995,8 +3022,8 @@
         "allValue": null,
         "current": {
           "tags": [],
-          "text": "ts-authentication-service-authentication-service-wk",
-          "value": "ts-authentication-service-authentication-service-wk"
+          "text": "ts-authentication-service-authentication-service",
+          "value": "ts-authentication-service-authentication-service"
         },
         "datasource": "Prometheus",
         "definition": "",
@@ -3076,5 +3103,5 @@
   "timezone": "browser",
   "title": "Kubernetes Deployment 2",
   "uid": "fMQue0xmz",
-  "version": 24
+  "version": 25
 }
