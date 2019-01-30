@@ -154,7 +154,7 @@ label_replace(kube_pod_info_ex{owner_kind="ReplicaSet"}, "replicaset", "$1", "ow
 * on (replicaset) group_left (owner_name, owner_kind)
 kube_replicaset_owner {owner_name="tsc-assessments-service-assessments-service"}
 
-// Get meomry usage for a deployment (may be incorrect)
+// Get memory usage for a deployment (may be incorrect)
 label_replace(
     label_replace(kube_pod_info_ex{owner_kind="ReplicaSet"}, "replicaset", "$1", "owner_name", "(.+)")
     * on (replicaset) group_left (owner_name, owner_kind)
@@ -162,3 +162,8 @@ label_replace(
 )
 * on(pod_name) group_right
 container_memory_usage_bytes
+
+
+
+
+
