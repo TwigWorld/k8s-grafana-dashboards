@@ -17,7 +17,7 @@
   "gnetId": 3137,
   "graphTooltip": 1,
   "id": 1,
-  "iteration": 1548689108038,
+  "iteration": 1548865648192,
   "links": [],
   "panels": [
     {
@@ -579,8 +579,16 @@
         {
           "expr": "sum(container_memory_usage_bytes{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) / 1024^2",
           "format": "time_series",
+          "hide": true,
           "intervalFactor": 1,
           "refId": "A"
+        },
+        {
+          "expr": "sum (\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod_name) group_right\n  container_memory_usage_bytes\n) \n",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -603,14 +611,16 @@
       },
       "yaxes": [
         {
-          "format": "short",
-          "label": "Memory (MB)",
+          "decimals": null,
+          "format": "decbytes",
+          "label": "Memory",
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
+          "decimals": null,
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -2959,7 +2969,6 @@
       {
         "allValue": ".*",
         "current": {
-          "tags": [],
           "text": "production",
           "value": "production"
         },
@@ -2986,8 +2995,8 @@
         "allValue": null,
         "current": {
           "tags": [],
-          "text": "ts-authentication-service-authentication-service",
-          "value": "ts-authentication-service-authentication-service"
+          "text": "ts-authentication-service-authentication-service-wk",
+          "value": "ts-authentication-service-authentication-service-wk"
         },
         "datasource": "Prometheus",
         "definition": "",
@@ -3007,12 +3016,37 @@
         "tagsQuery": "deployment",
         "type": "query",
         "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "ts-authentication-service",
+          "value": "ts-authentication-service"
+        },
+        "datasource": "Prometheus",
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Release",
+        "multi": false,
+        "name": "deployment_release",
+        "options": [],
+        "query": "label_values(kube_deployment_labels{namespace=\"$deployment_namespace\",deployment=\"$deployment_name\"}, label_release)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "deployment",
+        "type": "query",
+        "useTags": false
       }
     ]
   },
   "time": {
-    "from": "now/d",
-    "to": "now"
+    "from": "2019-01-30T14:30:26.442Z",
+    "to": "2019-01-30T16:14:21.435Z"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -3042,5 +3076,5 @@
   "timezone": "browser",
   "title": "Kubernetes Deployment 2",
   "uid": "fMQue0xmz",
-  "version": 19
+  "version": 24
 }
