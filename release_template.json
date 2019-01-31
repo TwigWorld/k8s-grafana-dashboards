@@ -1714,7 +1714,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "max(kube_hpa_spec_min_replicas{hpa=~\"$deployment_name\",namespace=\"$deployment_namespace\"}) without (instance, pod)",
+          "expr": "max(kube_hpa_spec_min_replicas{hpa=\"$deployment_name\",namespace=\"$deployment_namespace\"}) without (instance, pod)",
           "format": "time_series",
           "intervalFactor": 2,
           "metric": "kube_deployment_spec_replicas",
@@ -1799,7 +1799,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(min(kube_deployment_status_replicas_available{deployment=\"$deployment_name\",namespace=\"$deployment_namespace\"}) - max(kube_hpa_spec_min_replicas{hpa=~\"$deployment_name\",namespace=\"$deployment_namespace\"})) / (max(kube_hpa_spec_max_replicas{hpa=~\"$deployment_name\",namespace=\"$deployment_namespace\"}) - max(kube_hpa_spec_min_replicas{hpa=~\"$deployment_name\",namespace=\"$deployment_namespace\"})) * 100",
+          "expr": "(min(kube_deployment_status_replicas_available{deployment=\"$deployment_name\",namespace=\"$deployment_namespace\"}) - max(kube_hpa_spec_min_replicas{hpa=\"$deployment_name\",namespace=\"$deployment_namespace\"})) / (max(kube_hpa_spec_max_replicas{hpa=\"$deployment_name\",namespace=\"$deployment_namespace\"}) - max(kube_hpa_spec_min_replicas{hpa=\"$deployment_name\",namespace=\"$deployment_namespace\"})) * 100",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -2054,7 +2054,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "max(kube_hpa_spec_max_replicas{hpa=~\"$deployment_name\",namespace=\"$deployment_namespace\"}) without (instance, pod)",
+          "expr": "max(kube_hpa_spec_max_replicas{hpa=\"$deployment_name\",namespace=\"$deployment_namespace\"}) without (instance, pod)",
           "format": "time_series",
           "intervalFactor": 2,
           "metric": "kube_deployment_spec_replicas",
@@ -2734,8 +2734,8 @@
     ]
   },
   "time": {
-    "from": "now/d",
-    "to": "now"
+    "from": "2019-01-31T10:25:46.619Z",
+    "to": "2019-01-31T11:07:51.148Z"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -2765,5 +2765,5 @@
   "timezone": "browser",
   "title": "Kubernetes Deployment 2",
   "uid": "fMQue0xmz",
-  "version": 28
+  "version": 29
 }
