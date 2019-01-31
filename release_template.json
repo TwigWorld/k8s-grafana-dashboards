@@ -17,7 +17,7 @@
   "gnetId": 3137,
   "graphTooltip": 1,
   "id": 1,
-  "iteration": 1548865648218,
+  "iteration": 1548930246748,
   "links": [],
   "panels": [
     {
@@ -113,7 +113,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -536,7 +536,7 @@
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": true
+        "show": false
       },
       "tableColumn": "",
       "targets": [
@@ -627,7 +627,7 @@
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": true
+        "show": false
       },
       "tableColumn": "",
       "targets": [
@@ -717,7 +717,7 @@
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": true
+        "show": false
       },
       "tableColumn": "",
       "targets": [
@@ -759,7 +759,7 @@
       "dashes": false,
       "fill": 1,
       "gridPos": {
-        "h": 9,
+        "h": 6,
         "w": 12,
         "x": 0,
         "y": 15
@@ -770,7 +770,7 @@
         "current": false,
         "max": false,
         "min": false,
-        "show": true,
+        "show": false,
         "total": false,
         "values": false
       },
@@ -792,7 +792,7 @@
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "{{pod_name}}",
+          "legendFormat": "",
           "refId": "B"
         }
       ],
@@ -848,6 +848,7 @@
         "rgba(50, 172, 45, 0.97)"
       ],
       "datasource": "Prometheus",
+      "decimals": null,
       "editable": true,
       "error": false,
       "format": "none",
@@ -859,7 +860,7 @@
         "thresholdMarkers": true
       },
       "gridPos": {
-        "h": 3,
+        "h": 6,
         "w": 4,
         "x": 12,
         "y": 15
@@ -902,7 +903,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\", namespace=\"$deployment_namespace\"}[5m])) * 10000",
+          "expr": "sum(\n    label_replace(\n        label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n        * on (replicaset) group_left (owner_name, owner_kind)\n        kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n    )\n    * on(pod_name) group_right\n    rate(container_cpu_user_seconds_total {container_name!=\"POD\"}[5m])\n) * 1000",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -988,8 +989,15 @@
         {
           "expr": "(sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\", namespace=\"$deployment_namespace\"}[5m])) * 10000 / (sum(kube_pod_container_resource_requests_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {pod=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) * 1000))*100",
           "format": "time_series",
+          "hide": true,
           "intervalFactor": 1,
           "refId": "C"
+        },
+        {
+          "expr": "sum(\n    label_replace(\n        label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n        * on (replicaset) group_left (owner_name, owner_kind)\n        kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n    )\n    * on(pod_name) group_right\n    rate(container_cpu_user_seconds_total {container_name!=\"POD\"}[5m])\n) \n/\nsum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_requests_cpu_cores\n) \n* 100",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A"
         }
       ],
       "thresholds": "",
@@ -1069,181 +1077,14 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\", namespace=\"$deployment_namespace\"}[5m])) * 10000 / (sum(kube_pod_container_resource_limits_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {pod=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) * 1000) * 100",
+          "expr": "sum(\n    label_replace(\n        label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n        * on (replicaset) group_left (owner_name, owner_kind)\n        kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n    )\n    * on(pod_name) group_right\n    rate(container_cpu_user_seconds_total {container_name!=\"POD\"}[5m])\n) \n/\nsum(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_limits_cpu_cores\n) \n* 100",
           "format": "time_series",
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": "",
       "title": "CPU Usage Percentage (Limit)",
-      "type": "singlestat",
-      "valueFontSize": "110%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "Prometheus",
-      "editable": true,
-      "error": false,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 12,
-        "y": 18
-      },
-      "id": 17,
-      "interval": null,
-      "isNew": true,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "m",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "80%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "sum(kube_pod_container_resource_requests_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {pod=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) * 1000",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "B"
-        }
-      ],
-      "thresholds": "",
-      "title": "CPU Requests Total",
-      "type": "singlestat",
-      "valueFontSize": "110%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "Prometheus",
-      "editable": true,
-      "error": false,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 12,
-        "y": 21
-      },
-      "id": 19,
-      "interval": null,
-      "isNew": true,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "m",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "80%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "sum(kube_pod_container_resource_limits_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {pod=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) * 1000",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "B"
-        }
-      ],
-      "thresholds": "",
-      "title": "CPU Limits Total",
       "type": "singlestat",
       "valueFontSize": "110%",
       "valueMaps": [
@@ -1265,14 +1106,16 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 24
+        "y": 21
       },
       "id": 22,
       "legend": {
+        "alignAsTable": true,
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": false
@@ -1291,11 +1134,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"$deployment_name-.*$\", namespace=\"$deployment_namespace\"}[5m]) * 100) by (pod_name)",
+          "expr": "avg(\n    label_replace(\n        label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n        * on (replicaset) group_left (owner_name, owner_kind)\n        kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n    )\n    * on(pod_name) group_right\n    rate(container_cpu_user_seconds_total {container_name!=\"POD\"}[10m]) * 1000\n)  by (pod_name)",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "refId": "A"
+          "legendFormat": "",
+          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -1360,10 +1204,10 @@
         "thresholdMarkers": true
       },
       "gridPos": {
-        "h": 3,
+        "h": 6,
         "w": 4,
         "x": 12,
-        "y": 24
+        "y": 21
       },
       "id": 23,
       "interval": null,
@@ -1403,7 +1247,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "avg(irate(container_cpu_usage_seconds_total{pod_name!=\"\", pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\", namespace=\"$deployment_namespace\"}[5m])) * 10000",
+          "expr": "avg(\n    label_replace(\n        label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n        * on (replicaset) group_left (owner_name, owner_kind)\n        kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n    )\n    * on(pod_name) group_right\n    rate(container_cpu_user_seconds_total {container_name!=\"POD\"}[5m])\n) * 1000",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1447,93 +1291,8 @@
       "gridPos": {
         "h": 3,
         "w": 4,
-        "x": 12,
-        "y": 27
-      },
-      "id": 25,
-      "interval": null,
-      "isNew": true,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "m",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "80%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "expr": "avg(kube_pod_container_resource_limits_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {pod=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) * 1000",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
-        }
-      ],
-      "thresholds": "",
-      "title": "CPU Limits Per Pod",
-      "type": "singlestat",
-      "valueFontSize": "110%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "Prometheus",
-      "editable": true,
-      "error": false,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 12,
-        "y": 30
+        "x": 16,
+        "y": 24
       },
       "id": 24,
       "interval": null,
@@ -1568,21 +1327,102 @@
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": true
+        "show": false
       },
       "tableColumn": "",
       "targets": [
         {
-          "expr": "avg(kube_pod_container_resource_requests_cpu_cores * on (namespace, pod) group_left(label_release) kube_pod_labels {pod=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}) * 1000",
+          "expr": "avg(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_requests_cpu_cores\n) * 1000",
           "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": "",
       "title": "CPU Requests Per Pod",
+      "type": "singlestat",
+      "valueFontSize": "110%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "datasource": "Prometheus",
+      "editable": true,
+      "error": false,
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 24
+      },
+      "id": 25,
+      "interval": null,
+      "isNew": true,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "m",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "80%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "avg(\n  label_replace(\n      label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n      * on (replicaset) group_left (owner_name, owner_kind)\n      kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n  )\n  * on(pod) group_right\n  kube_pod_container_resource_limits_cpu_cores\n) * 1000",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "B"
+        }
+      ],
+      "thresholds": "",
+      "title": "CPU Limits Per Pod",
       "type": "singlestat",
       "valueFontSize": "110%",
       "valueMaps": [
@@ -1600,7 +1440,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 33
+        "y": 30
       },
       "id": 50,
       "panels": [],
@@ -1617,7 +1457,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 34
+        "y": 31
       },
       "id": 40,
       "legend": {
@@ -1643,11 +1483,11 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kube_pod_container_status_restarts_total{namespace=\"production\",pod=~\"ts-authentication-service-authentication-service.*\"} ",
+          "expr": "label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n  * on (replicaset) group_left (owner_name, owner_kind)\nkube_replicaset_owner {owner_name=\"$deployment_name\"}\n  * on(pod)  group_right\nkube_pod_container_status_restarts_total",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{pod}}",
-          "refId": "B"
+          "refId": "A"
         }
       ],
       "thresholds": [],
@@ -1702,7 +1542,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 34
+        "y": 31
       },
       "id": 42,
       "legend": {
@@ -1728,28 +1568,28 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kube_pod_container_status_ready{pod=~\"$deployment_name.*\",namespace=\"$deployment_namespace\"})",
+          "expr": "sum (\n  label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n    * on (replicaset) group_left (owner_name, owner_kind)\n  kube_replicaset_owner {owner_name=\"$deployment_name\"}\n    * on(pod)  group_right\n  kube_pod_container_status_ready\n)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Ready",
           "refId": "B"
         },
         {
-          "expr": "sum(kube_pod_container_status_terminated{pod=~\"$deployment_name.*\",namespace=\"$deployment_namespace\"})",
+          "expr": "sum (\n  label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n    * on (replicaset) group_left (owner_name, owner_kind)\n  kube_replicaset_owner {owner_name=\"$deployment_name\"}\n    * on(pod)  group_right\n  kube_pod_container_status_terminated\n)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Terminated",
           "refId": "A"
         },
         {
-          "expr": "sum(kube_pod_container_status_waiting{pod=~\"$deployment_name.*\",namespace=\"$deployment_namespace\"})",
+          "expr": "sum (\n  label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n    * on (replicaset) group_left (owner_name, owner_kind)\n  kube_replicaset_owner {owner_name=\"$deployment_name\"}\n    * on(pod)  group_right\n  kube_pod_container_status_waiting\n)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Waiting",
           "refId": "C"
         },
         {
-          "expr": "sum(kube_pod_container_status_running{pod=~\"$deployment_name.*\",namespace=\"$deployment_namespace\"})",
+          "expr": "sum (\n  label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n    * on (replicaset) group_left (owner_name, owner_kind)\n  kube_replicaset_owner {owner_name=\"$deployment_name\"}\n    * on(pod)  group_right\n  kube_pod_container_status_running\n)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Running",
@@ -1803,7 +1643,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 42
+        "y": 39
       },
       "id": 48,
       "title": "Replicas",
@@ -1834,7 +1674,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 43
+        "y": 40
       },
       "id": 29,
       "interval": null,
@@ -1919,7 +1759,7 @@
         "h": 6,
         "w": 4,
         "x": 8,
-        "y": 43
+        "y": 40
       },
       "id": 32,
       "interval": null,
@@ -2004,7 +1844,7 @@
         "h": 3,
         "w": 8,
         "x": 12,
-        "y": 43
+        "y": 40
       },
       "id": 6,
       "interval": null,
@@ -2088,7 +1928,7 @@
         "h": 6,
         "w": 4,
         "x": 20,
-        "y": 43
+        "y": 40
       },
       "id": 33,
       "interval": null,
@@ -2174,7 +2014,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 46
+        "y": 43
       },
       "id": 31,
       "interval": null,
@@ -2260,7 +2100,7 @@
         "h": 3,
         "w": 8,
         "x": 12,
-        "y": 46
+        "y": 43
       },
       "id": 30,
       "interval": null,
@@ -2335,7 +2175,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 49
+        "y": 46
       },
       "hideTimeOverride": false,
       "id": 1,
@@ -2453,7 +2293,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 56
+        "y": 53
       },
       "id": 44,
       "panels": [],
@@ -2484,7 +2324,7 @@
         "h": 3,
         "w": 8,
         "x": 0,
-        "y": 57
+        "y": 54
       },
       "id": 7,
       "interval": null,
@@ -2569,7 +2409,7 @@
         "h": 3,
         "w": 8,
         "x": 8,
-        "y": 57
+        "y": 54
       },
       "id": 39,
       "interval": null,
@@ -2654,7 +2494,7 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 57
+        "y": 54
       },
       "id": 38,
       "interval": null,
@@ -2725,7 +2565,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 60
+        "y": 57
       },
       "id": 56,
       "legend": {
@@ -2850,7 +2690,6 @@
       {
         "allValue": null,
         "current": {
-          "tags": [],
           "text": "ts-authentication-service-authentication-service",
           "value": "ts-authentication-service-authentication-service"
         },
@@ -2901,8 +2740,8 @@
     ]
   },
   "time": {
-    "from": "2019-01-30T14:30:26.442Z",
-    "to": "2019-01-30T16:14:21.435Z"
+    "from": "now/d",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -2932,5 +2771,5 @@
   "timezone": "browser",
   "title": "Kubernetes Deployment 2",
   "uid": "fMQue0xmz",
-  "version": 26
+  "version": 27
 }
