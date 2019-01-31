@@ -2364,12 +2364,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(rate(container_network_receive_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}[3m]))",
+          "expr": "sum(\nlabel_replace(\n    label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n    * on (replicaset) group_left (owner_name, owner_kind)\n    kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n)\n* on(pod_name) group_right\nrate(container_network_receive_bytes_total[3m])\n)",
           "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": "",
@@ -2449,12 +2447,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(rate(container_network_transmit_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}[3m])) ",
+          "expr": "sum(\nlabel_replace(\n    label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n    * on (replicaset) group_left (owner_name, owner_kind)\n    kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n)\n* on(pod_name) group_right\nrate(container_network_transmit_bytes_total[3m])\n)",
           "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": "",
@@ -2534,12 +2530,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(rate(container_network_transmit_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}[3m])) + sum(rate(container_network_receive_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}[3m]))",
+          "expr": "sum(\nlabel_replace(\n    label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n    * on (replicaset) group_left (owner_name, owner_kind)\n    kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n)\n* on(pod_name) group_right\nrate(container_network_receive_bytes_total[3m])\n)\n+\nsum(\nlabel_replace(\n    label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n    * on (replicaset) group_left (owner_name, owner_kind)\n    kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n)\n* on(pod_name) group_right\nrate(container_network_transmit_bytes_total[3m])\n)",
           "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "refId": "A",
-          "step": 600
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": "",
@@ -2591,21 +2585,21 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_network_receive_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}[3m]))",
+          "expr": "sum(\nlabel_replace(\n    label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n    * on (replicaset) group_left (owner_name, owner_kind)\n    kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n)\n* on(pod_name) group_right\nrate(container_network_receive_bytes_total[3m])\n)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Inbound",
           "refId": "A"
         },
         {
-          "expr": "sum(rate(container_network_transmit_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}[3m])) ",
+          "expr": "sum(\nlabel_replace(\n    label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n    * on (replicaset) group_left (owner_name, owner_kind)\n    kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n)\n* on(pod_name) group_right\nrate(container_network_transmit_bytes_total[3m])\n)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Outbound",
           "refId": "B"
         },
         {
-          "expr": "sum(rate(container_network_transmit_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}[3m])) + sum(rate(container_network_receive_bytes_total{namespace=\"$deployment_namespace\",pod_name=~\"$deployment_name-[a-z0-9]+-[a-z0-9]+$\"}[3m]))",
+          "expr": "sum(\nlabel_replace(\n    label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n    * on (replicaset) group_left (owner_name, owner_kind)\n    kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n)\n* on(pod_name) group_right\nrate(container_network_receive_bytes_total[3m])\n)\n+\nsum(\nlabel_replace(\n    label_replace(kube_pod_info_ex{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.+)\")\n    * on (replicaset) group_left (owner_name, owner_kind)\n    kube_replicaset_owner {owner_name=\"$deployment_name\"}, \"pod_name\", \"$1\", \"pod\", \"(.+)\"\n)\n* on(pod_name) group_right\nrate(container_network_transmit_bytes_total[3m])\n)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Combined",
@@ -2771,5 +2765,5 @@
   "timezone": "browser",
   "title": "Kubernetes Deployment 2",
   "uid": "fMQue0xmz",
-  "version": 27
+  "version": 28
 }
