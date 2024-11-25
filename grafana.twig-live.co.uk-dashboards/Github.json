@@ -1,0 +1,47 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": true,
+        "canEdit": true,
+        "canAdmin": true,
+        "canStar": true,
+        "canDelete": true,
+        "slug": "github",
+        "url": "/dashboards/f/BLfaPUPVk/github",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2023-04-23T02:16:09Z",
+        "updated": "2023-04-23T02:16:09Z",
+        "updatedBy": "admin",
+        "createdBy": "admin",
+        "version": 1,
+        "hasAcl": false,
+        "isFolder": true,
+        "folderId": 0,
+        "folderUid": "",
+        "folderTitle": "General",
+        "folderUrl": "",
+        "provisioned": false,
+        "provisionedExternalId": "",
+        "annotationsPermissions": {
+            "dashboard": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            },
+            "organization": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            }
+        },
+        "publicDashboardAccessToken": "",
+        "publicDashboardEnabled": false
+    },
+    "dashboard": {
+        "id": 59,
+        "schemaVersion": 17,
+        "title": "Github",
+        "uid": "BLfaPUPVk",
+        "version": 1
+    }
+}

@@ -1,0 +1,430 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": true,
+        "canEdit": true,
+        "canAdmin": true,
+        "canStar": true,
+        "canDelete": true,
+        "slug": "server-locations",
+        "url": "/d/L7Ea5os4z/server-locations",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2023-05-01T21:43:56Z",
+        "updated": "2023-05-03T11:25:17Z",
+        "updatedBy": "admin",
+        "createdBy": "admin",
+        "version": 27,
+        "hasAcl": false,
+        "isFolder": false,
+        "folderId": 0,
+        "folderUid": "",
+        "folderTitle": "General",
+        "folderUrl": "",
+        "provisioned": false,
+        "provisionedExternalId": "",
+        "annotationsPermissions": {
+            "dashboard": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            },
+            "organization": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            }
+        },
+        "publicDashboardAccessToken": "",
+        "publicDashboardEnabled": false
+    },
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": {
+                        "type": "grafana",
+                        "uid": "-- Grafana --"
+                    },
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "target": {
+                        "limit": 100,
+                        "matchAny": false,
+                        "tags": [],
+                        "type": "dashboard"
+                    },
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "fiscalYearStartMonth": 0,
+        "graphTooltip": 0,
+        "id": 62,
+        "links": [],
+        "liveNow": false,
+        "panels": [
+            {
+                "datasource": {
+                    "type": "grafana-googlesheets-datasource",
+                    "uid": "hYU9Q2y4z"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "continuous-BlYlRd"
+                        },
+                        "custom": {
+                            "hideFrom": {
+                                "legend": false,
+                                "tooltip": false,
+                                "viz": false
+                            }
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        },
+                        "unit": "none"
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 19,
+                    "w": 16,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 2,
+                "options": {
+                    "basemap": {
+                        "config": {
+                            "showLabels": true,
+                            "theme": "dark"
+                        },
+                        "name": "Layer 0",
+                        "type": "carto"
+                    },
+                    "controls": {
+                        "mouseWheelZoom": true,
+                        "showAttribution": true,
+                        "showDebug": false,
+                        "showScale": true,
+                        "showZoom": true
+                    },
+                    "layers": [
+                        {
+                            "config": {
+                                "rules": [],
+                                "src": "public/maps/countries.geojson",
+                                "style": {
+                                    "color": {
+                                        "fixed": "#00ff0012"
+                                    },
+                                    "opacity": 0,
+                                    "rotation": {
+                                        "fixed": 0,
+                                        "max": 360,
+                                        "min": -360,
+                                        "mode": "mod"
+                                    },
+                                    "size": {
+                                        "fixed": 5,
+                                        "max": 15,
+                                        "min": 2
+                                    },
+                                    "symbol": {
+                                        "fixed": "img/icons/marker/circle.svg",
+                                        "mode": "fixed"
+                                    },
+                                    "textConfig": {
+                                        "fontSize": 12,
+                                        "offsetX": 0,
+                                        "offsetY": 0,
+                                        "textAlign": "center",
+                                        "textBaseline": "middle"
+                                    }
+                                }
+                            },
+                            "name": "country borders",
+                            "tooltip": false,
+                            "type": "geojson"
+                        },
+                        {
+                            "config": {
+                                "rules": [],
+                                "src": "public/maps/usa-states.geojson",
+                                "style": {
+                                    "color": {
+                                        "fixed": "#00ff0012"
+                                    },
+                                    "opacity": 0,
+                                    "rotation": {
+                                        "fixed": 0,
+                                        "max": 360,
+                                        "min": -360,
+                                        "mode": "mod"
+                                    },
+                                    "size": {
+                                        "fixed": 5,
+                                        "max": 15,
+                                        "min": 2
+                                    },
+                                    "symbol": {
+                                        "fixed": "img/icons/marker/circle.svg",
+                                        "mode": "fixed"
+                                    },
+                                    "textConfig": {
+                                        "fontSize": 12,
+                                        "offsetX": 0,
+                                        "offsetY": 0,
+                                        "textAlign": "center",
+                                        "textBaseline": "middle"
+                                    }
+                                }
+                            },
+                            "name": "statelines",
+                            "tooltip": false,
+                            "type": "geojson"
+                        },
+                        {
+                            "config": {
+                                "showLegend": false,
+                                "style": {
+                                    "color": {
+                                        "field": "long",
+                                        "fixed": "dark-green"
+                                    },
+                                    "opacity": 0.4,
+                                    "rotation": {
+                                        "fixed": 0,
+                                        "max": 360,
+                                        "min": -360,
+                                        "mode": "mod"
+                                    },
+                                    "size": {
+                                        "fixed": 5,
+                                        "max": 100,
+                                        "min": 2
+                                    },
+                                    "symbol": {
+                                        "fixed": "img/icons/marker/circle.svg",
+                                        "mode": "fixed"
+                                    },
+                                    "text": {
+                                        "field": "name",
+                                        "fixed": "",
+                                        "mode": "field"
+                                    },
+                                    "textConfig": {
+                                        "fontSize": 12,
+                                        "offsetX": 0,
+                                        "offsetY": 0,
+                                        "textAlign": "center",
+                                        "textBaseline": "top"
+                                    }
+                                }
+                            },
+                            "filterData": {
+                                "id": "byRefId",
+                                "options": "A"
+                            },
+                            "location": {
+                                "latitude": "lat",
+                                "longitude": "long",
+                                "mode": "coords"
+                            },
+                            "name": "Locations",
+                            "tooltip": true,
+                            "type": "markers"
+                        },
+                        {
+                            "config": {
+                                "blur": 15,
+                                "radius": 5,
+                                "weight": {
+                                    "fixed": 1,
+                                    "max": 1,
+                                    "min": 0
+                                }
+                            },
+                            "filterData": {
+                                "id": "byRefId",
+                                "options": "A"
+                            },
+                            "location": {
+                                "latitude": "lat",
+                                "longitude": "long",
+                                "mode": "coords"
+                            },
+                            "name": "Server heatmap",
+                            "tooltip": false,
+                            "type": "heatmap"
+                        }
+                    ],
+                    "tooltip": {
+                        "mode": "details"
+                    },
+                    "view": {
+                        "id": "coords",
+                        "lat": 46.484741,
+                        "lon": -59.167634,
+                        "zoom": 2.8
+                    }
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "cacheDurationSeconds": 300,
+                        "datasource": {
+                            "type": "grafana-googlesheets-datasource",
+                            "uid": "hYU9Q2y4z"
+                        },
+                        "decimalSeparator": ".",
+                        "delimiter": ",",
+                        "header": true,
+                        "ignoreUnknown": false,
+                        "refId": "A",
+                        "schema": [
+                            {
+                                "name": "",
+                                "type": "string"
+                            }
+                        ],
+                        "skipRows": 0,
+                        "spreadsheet": "1m_fvlFaJ-KNV43NJ9NQ8gF2taoH-FR0tnPau-jVJ-28"
+                    }
+                ],
+                "title": "Server Locations",
+                "type": "geomap"
+            },
+            {
+                "datasource": {
+                    "type": "grafana-googlesheets-datasource",
+                    "uid": "hYU9Q2y4z"
+                },
+                "gridPos": {
+                    "h": 7,
+                    "w": 8,
+                    "x": 16,
+                    "y": 0
+                },
+                "id": 5,
+                "options": {
+                    "altitudeColumnName": "alt",
+                    "customTextureURL": "",
+                    "latitudeColumnName": "lat",
+                    "longitudeColumnName": "lon",
+                    "rotateSpeed": 0.4,
+                    "timeColumnName": "time"
+                },
+                "targets": [
+                    {
+                        "cacheDurationSeconds": 300,
+                        "datasource": {
+                            "type": "grafana-googlesheets-datasource",
+                            "uid": "hYU9Q2y4z"
+                        },
+                        "refId": "A",
+                        "spreadsheet": "18V-V2R1tJaBZax4y9E1k0v1l45ZiX5vk-FN4T5KStHs"
+                    }
+                ],
+                "title": "Global Network Topology (simplified)",
+                "type": "flaminggoat-maptrack3d-panel"
+            },
+            {
+                "datasource": {
+                    "type": "grafana-googlesheets-datasource",
+                    "uid": "hYU9Q2y4z"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "inspect": false
+                        },
+                        "decimals": 5,
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 12,
+                    "w": 8,
+                    "x": 16,
+                    "y": 7
+                },
+                "id": 3,
+                "options": {
+                    "footer": {
+                        "enablePagination": true,
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "cacheDurationSeconds": 300,
+                        "key": "Q-630b6069-7192-43df-9404-dc2145bd4b0f-0",
+                        "refId": "A",
+                        "spreadsheet": "1m_fvlFaJ-KNV43NJ9NQ8gF2taoH-FR0tnPau-jVJ-28"
+                    }
+                ],
+                "title": "Locations",
+                "type": "table"
+            }
+        ],
+        "schemaVersion": 37,
+        "style": "dark",
+        "tags": [
+            "locations"
+        ],
+        "templating": {
+            "list": []
+        },
+        "time": {
+            "from": "now-6h",
+            "to": "now"
+        },
+        "timepicker": {
+            "hidden": true
+        },
+        "timezone": "",
+        "title": "Server Locations",
+        "uid": "L7Ea5os4z",
+        "version": 27,
+        "weekStart": ""
+    }
+}

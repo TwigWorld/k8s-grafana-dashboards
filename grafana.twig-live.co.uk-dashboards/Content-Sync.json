@@ -1,0 +1,711 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": true,
+        "canEdit": true,
+        "canAdmin": true,
+        "canStar": true,
+        "canDelete": true,
+        "slug": "content-sync",
+        "url": "/d/mnCxkjl7z/content-sync",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2022-05-11T19:25:26Z",
+        "updated": "2022-08-31T10:03:32Z",
+        "updatedBy": "gmasucci@twigeducation.com",
+        "createdBy": "admin",
+        "version": 29,
+        "hasAcl": false,
+        "isFolder": false,
+        "folderId": 41,
+        "folderUid": "M6U2h_Z4k",
+        "folderTitle": "Content",
+        "folderUrl": "/dashboards/f/M6U2h_Z4k/content",
+        "provisioned": false,
+        "provisionedExternalId": "",
+        "annotationsPermissions": {
+            "dashboard": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            },
+            "organization": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            }
+        },
+        "publicDashboardAccessToken": "",
+        "publicDashboardEnabled": false
+    },
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": "-- Grafana --",
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "target": {
+                        "limit": 100,
+                        "matchAny": false,
+                        "tags": [],
+                        "type": "dashboard"
+                    },
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "fiscalYearStartMonth": 0,
+        "graphTooltip": 0,
+        "id": 32,
+        "iteration": 1661940164638,
+        "links": [],
+        "liveNow": false,
+        "panels": [
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "${database}"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "filterable": true
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 9,
+                    "w": 12,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 2,
+                "options": {
+                    "footer": {
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true
+                },
+                "pluginVersion": "8.3.4",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "${database}"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "SELECT\n  created_at AS \"time\",\n  tocs_public_key,\n  status,\n  created_at,\n  completed_at,\n  retries, id\nFROM jobs\nWHERE\n  started_at IS NOT NULL AND\n  status != 'sync.completed'::sync_steps AND\n  status != 'sync.aborted'::sync_steps AND\n  status != 'sync.failed'::sync_steps AND\n  status != 'sync.rejected'::sync_steps\nORDER BY 1",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "tocs_public_key"
+                                    ],
+                                    "type": "column"
+                                }
+                            ],
+                            [
+                                {
+                                    "params": [
+                                        "status"
+                                    ],
+                                    "type": "column"
+                                }
+                            ],
+                            [
+                                {
+                                    "params": [
+                                        "created_at"
+                                    ],
+                                    "type": "column"
+                                }
+                            ],
+                            [
+                                {
+                                    "params": [
+                                        "details"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "table": "jobs",
+                        "timeColumn": "created_at",
+                        "timeColumnType": "timestamptz",
+                        "where": [
+                            {
+                                "datatype": "timestamptz",
+                                "name": "",
+                                "params": [
+                                    "started_at",
+                                    "IS NOT",
+                                    "NULL"
+                                ],
+                                "type": "expression"
+                            },
+                            {
+                                "datatype": "timestamptz",
+                                "name": "",
+                                "params": [
+                                    "completed_at",
+                                    "IS",
+                                    "NULL"
+                                ],
+                                "type": "expression"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Currently Running Syncs",
+                "type": "table"
+            },
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "${database}"
+                },
+                "description": "WIP",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "filterable": true
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "status"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 102
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "id"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 84
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "gridPos": {
+                    "h": 9,
+                    "w": 12,
+                    "x": 12,
+                    "y": 0
+                },
+                "id": 4,
+                "options": {
+                    "footer": {
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true,
+                    "sortBy": [
+                        {
+                            "desc": true,
+                            "displayName": "started_at"
+                        }
+                    ]
+                },
+                "pluginVersion": "8.3.4",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "${database}"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "SELECT\n  completed_at AS \"time\",\n  tocs_public_key,\n  id,\n  created_at,\n  started_at,\n  status,\n  details\nFROM jobs\nWHERE\n  $__timeFilter(completed_at) AND\n  completed_at IS NOT NULL AND (\n    status = 'sync.completed'::sync_steps OR\n    status = 'sync.aborted'::sync_steps OR\n    status = 'sync.failed'::sync_steps OR\n    status = 'sync.rejected'::sync_steps\n  )\n  \nORDER BY 1 DESC",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "tocs_public_key"
+                                    ],
+                                    "type": "column"
+                                }
+                            ],
+                            [
+                                {
+                                    "params": [
+                                        "id"
+                                    ],
+                                    "type": "column"
+                                }
+                            ],
+                            [
+                                {
+                                    "params": [
+                                        "created_at"
+                                    ],
+                                    "type": "column"
+                                }
+                            ],
+                            [
+                                {
+                                    "params": [
+                                        "started_at"
+                                    ],
+                                    "type": "column"
+                                }
+                            ],
+                            [
+                                {
+                                    "params": [
+                                        "status"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "table": "jobs",
+                        "timeColumn": "completed_at",
+                        "timeColumnType": "timestamptz",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            },
+                            {
+                                "datatype": "timestamptz",
+                                "name": "",
+                                "params": [
+                                    "completed_at",
+                                    "IS NOT",
+                                    "NULL"
+                                ],
+                                "type": "expression"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Recently Completed Sync",
+                "type": "table"
+            },
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "${database}"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "palette-classic"
+                        },
+                        "custom": {
+                            "axisLabel": "",
+                            "axisPlacement": "auto",
+                            "barAlignment": 1,
+                            "drawStyle": "bars",
+                            "fillOpacity": 100,
+                            "gradientMode": "hue",
+                            "hideFrom": {
+                                "legend": false,
+                                "tooltip": false,
+                                "viz": false
+                            },
+                            "lineInterpolation": "linear",
+                            "lineWidth": 1,
+                            "pointSize": 5,
+                            "scaleDistribution": {
+                                "type": "linear"
+                            },
+                            "showPoints": "auto",
+                            "spanNulls": false,
+                            "stacking": {
+                                "group": "A",
+                                "mode": "normal"
+                            },
+                            "thresholdsStyle": {
+                                "mode": "off"
+                            }
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        },
+                        "unit": "s"
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 0,
+                    "y": 9
+                },
+                "id": 9,
+                "options": {
+                    "legend": {
+                        "calcs": [],
+                        "displayMode": "list",
+                        "placement": "bottom"
+                    },
+                    "tooltip": {
+                        "mode": "single"
+                    }
+                },
+                "pluginVersion": "8.3.4",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "${database}"
+                        },
+                        "format": "time_series",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "SELECT\n  started_at AS \"time\",\n  EXTRACT(EPOCH FROM (now() - started_at)) as \"Current Runtime\",\n  tocs_public_key\nFROM jobs\nWHERE\n  $__timeFilter(started_at) and \n  status != 'sync.completed'::sync_steps AND\n  status != 'sync.aborted'::sync_steps AND\n  status != 'sync.failed'::sync_steps AND\n  status != 'sync.rejected'::sync_steps\nORDER BY 1\n-- EPOCH FROM '04:30:25'::time",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Currently running time",
+                "transformations": [],
+                "type": "timeseries"
+            },
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "${database}"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "palette-classic"
+                        },
+                        "custom": {
+                            "axisLabel": "",
+                            "axisPlacement": "auto",
+                            "barAlignment": 1,
+                            "drawStyle": "bars",
+                            "fillOpacity": 100,
+                            "gradientMode": "none",
+                            "hideFrom": {
+                                "legend": false,
+                                "tooltip": false,
+                                "viz": false
+                            },
+                            "lineInterpolation": "smooth",
+                            "lineWidth": 1,
+                            "pointSize": 5,
+                            "scaleDistribution": {
+                                "type": "linear"
+                            },
+                            "showPoints": "auto",
+                            "spanNulls": false,
+                            "stacking": {
+                                "group": "A",
+                                "mode": "none"
+                            },
+                            "thresholdsStyle": {
+                                "mode": "off"
+                            }
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        },
+                        "unit": "s"
+                    },
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "Mean"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.drawStyle",
+                                    "value": "line"
+                                },
+                                {
+                                    "id": "custom.showPoints",
+                                    "value": "auto"
+                                },
+                                {
+                                    "id": "color",
+                                    "value": {
+                                        "fixedColor": "text",
+                                        "mode": "fixed"
+                                    }
+                                },
+                                {
+                                    "id": "custom.lineInterpolation",
+                                    "value": "smooth"
+                                },
+                                {
+                                    "id": "custom.stacking",
+                                    "value": {
+                                        "group": "A",
+                                        "mode": "none"
+                                    }
+                                },
+                                {
+                                    "id": "custom.lineStyle",
+                                    "value": {
+                                        "dash": [
+                                            0,
+                                            10
+                                        ],
+                                        "fill": "dot"
+                                    }
+                                },
+                                {
+                                    "id": "custom.fillOpacity",
+                                    "value": 0
+                                }
+                            ]
+                        },
+                        {
+                            "__systemRef": "hideSeriesFrom",
+                            "matcher": {
+                                "id": "byNames",
+                                "options": {
+                                    "mode": "exclude",
+                                    "names": [
+                                        "Time In Process ts-ms-ng-ds"
+                                    ],
+                                    "prefix": "All except:",
+                                    "readOnly": true
+                                }
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.hideFrom",
+                                    "value": {
+                                        "legend": false,
+                                        "tooltip": false,
+                                        "viz": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 12,
+                    "y": 9
+                },
+                "id": 6,
+                "options": {
+                    "legend": {
+                        "calcs": [],
+                        "displayMode": "list",
+                        "placement": "bottom"
+                    },
+                    "tooltip": {
+                        "mode": "single"
+                    }
+                },
+                "pluginVersion": "8.3.4",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "${database}"
+                        },
+                        "format": "time_series",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "SELECT\n  started_at AS \"time\",\n  tocs_public_key,\n  EXTRACT(EPOCH FROM (completed_at - started_at)) as \"Time In Process\"\nFROM jobs\nWHERE\n  $__timeFilter(started_at)\nORDER BY 1\n\n-- EPOCH FROM '04:30:25'::time",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Time in Process",
+                "transformations": [
+                    {
+                        "id": "calculateField",
+                        "options": {
+                            "mode": "reduceRow",
+                            "reduce": {
+                                "include": [
+                                    "Time In Process NGSS_content-sync-worker",
+                                    "Time In Process PREVIEW-TS-MS-NG",
+                                    "Time In Process preview-ts-ms-ng",
+                                    "Time In Process ts-ms-ng",
+                                    "Time In Process ts-ms-ng-ds",
+                                    "Time In Process ts-ms-ny",
+                                    "Time In Process ts-ms-pa",
+                                    "Time In Process ts-ms-wv",
+                                    "Time In Process tscore-ny",
+                                    "Time In Process tscore-live-ng",
+                                    "Time In Process tscore-live-ok",
+                                    "Time In Process tscore-pilot",
+                                    "Time In Process tscore-preview"
+                                ],
+                                "reducer": "mean"
+                            },
+                            "replaceFields": false
+                        }
+                    }
+                ],
+                "type": "timeseries"
+            }
+        ],
+        "refresh": "",
+        "schemaVersion": 34,
+        "style": "dark",
+        "tags": [
+            "Content"
+        ],
+        "templating": {
+            "list": [
+                {
+                    "current": {
+                        "selected": false,
+                        "text": "ContentSyncReadReplica",
+                        "value": "ContentSyncReadReplica"
+                    },
+                    "hide": 0,
+                    "includeAll": false,
+                    "multi": false,
+                    "name": "database",
+                    "options": [],
+                    "query": "postgres",
+                    "queryValue": "",
+                    "refresh": 1,
+                    "regex": "/^ContentSync*/",
+                    "skipUrlSync": false,
+                    "type": "datasource"
+                }
+            ]
+        },
+        "time": {
+            "from": "now-2d",
+            "to": "now"
+        },
+        "timepicker": {},
+        "timezone": "",
+        "title": "Content-Sync",
+        "uid": "mnCxkjl7z",
+        "version": 29,
+        "weekStart": ""
+    }
+}

@@ -1,0 +1,1740 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": true,
+        "canEdit": true,
+        "canAdmin": true,
+        "canStar": true,
+        "canDelete": true,
+        "slug": "district-overview",
+        "url": "/d/0p6UN5e7z/district-overview",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2022-07-06T10:22:28Z",
+        "updated": "2023-08-14T14:49:02Z",
+        "updatedBy": "djenkins@twigeducation.com",
+        "createdBy": "admin",
+        "version": 61,
+        "hasAcl": false,
+        "isFolder": false,
+        "folderId": 38,
+        "folderUid": "CP3_Oum4z",
+        "folderTitle": "Rostering",
+        "folderUrl": "/dashboards/f/CP3_Oum4z/rostering",
+        "provisioned": false,
+        "provisionedExternalId": "",
+        "annotationsPermissions": {
+            "dashboard": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            },
+            "organization": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            }
+        },
+        "publicDashboardAccessToken": "",
+        "publicDashboardEnabled": false
+    },
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": {
+                        "type": "datasource",
+                        "uid": "grafana"
+                    },
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "target": {
+                        "limit": 100,
+                        "matchAny": false,
+                        "tags": [],
+                        "type": "dashboard"
+                    },
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "description": "Provides some district oversight",
+        "editable": true,
+        "fiscalYearStartMonth": 0,
+        "graphTooltip": 0,
+        "id": 34,
+        "links": [],
+        "liveNow": false,
+        "panels": [
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "QalHUc67k"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 3,
+                    "w": 7,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 18,
+                "options": {
+                    "colorMode": "background",
+                    "graphMode": "area",
+                    "justifyMode": "auto",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                        "calcs": [
+                            "lastNotNull"
+                        ],
+                        "fields": "/^name$/",
+                        "values": false
+                    },
+                    "text": {
+                        "valueSize": 24
+                    },
+                    "textMode": "auto"
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "QalHUc67k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "SELECT name from profiles_district\nWhere short_code='$districtShortCode'\n",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "District Name",
+                "type": "stat"
+            },
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "QalHUc67k"
+                },
+                "description": "",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "palette-classic"
+                        },
+                        "custom": {
+                            "hideFrom": {
+                                "legend": false,
+                                "tooltip": false,
+                                "viz": false
+                            }
+                        },
+                        "mappings": [],
+                        "unit": "none"
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 6,
+                    "w": 5,
+                    "x": 7,
+                    "y": 0
+                },
+                "id": 6,
+                "options": {
+                    "displayLabels": [],
+                    "legend": {
+                        "displayMode": "table",
+                        "placement": "right",
+                        "showLegend": true,
+                        "values": [
+                            "value"
+                        ]
+                    },
+                    "pieType": "pie",
+                    "reduceOptions": {
+                        "calcs": [
+                            "lastNotNull"
+                        ],
+                        "fields": "",
+                        "values": false
+                    },
+                    "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                    }
+                },
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "QalHUc67k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "SELECT role, count(role) from profiles_user\nWHERE district_id=(\n  SELECT\n    id\n  FROM profiles_district\n  WHERE short_code='$districtShortCode'\n)\nGROUP BY 1\nORDER BY 1\n",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "table": "profiles_user",
+                        "timeColumn": "time",
+                        "where": []
+                    },
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "QalHUc67k"
+                        },
+                        "format": "time_series",
+                        "group": [],
+                        "hide": true,
+                        "metricColumn": "none",
+                        "rawQuery": false,
+                        "rawSql": "SELECT\n  time AS \"time\",\n  value\nFROM profiles\nORDER BY 1",
+                        "refId": "B",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "table": "profiles",
+                        "timeColumn": "time",
+                        "where": []
+                    }
+                ],
+                "title": "User Breakdown by Role",
+                "transformations": [
+                    {
+                        "id": "rowsToFields",
+                        "options": {}
+                    }
+                ],
+                "type": "piechart"
+            },
+            {
+                "datasource": {
+                    "type": "datasource",
+                    "uid": "-- Mixed --"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "inspect": false,
+                            "minWidth": 50
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 12,
+                    "y": 0
+                },
+                "id": 23,
+                "options": {
+                    "footer": {
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "QalHUc67k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "SELECT\n *\nFROM profiles_rostersettings\nwhere district_id in (select id from public.profiles_district\nWHERE short_code = '$districtShortCode');",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "table": "profiles_rostersettings",
+                        "timeColumn": "time",
+                        "where": []
+                    }
+                ],
+                "title": "Roster Settings",
+                "type": "table"
+            },
+            {
+                "datasource": {
+                    "type": "datasource",
+                    "uid": "-- Mixed --"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "inspect": false
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 3,
+                    "w": 7,
+                    "x": 0,
+                    "y": 3
+                },
+                "id": 19,
+                "options": {
+                    "footer": {
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "frameIndex": 0,
+                    "showHeader": true,
+                    "sortBy": [
+                        {
+                            "desc": true,
+                            "displayName": "activeTotals"
+                        }
+                    ]
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "V4UH5jX7k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "hide": false,
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select summary from jobs\nWHERE\n  district_short_code = '$districtShortCode' AND\n  $__timeFilter(created_at) \n  order by created_at desc limit 1;\n",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    },
+                    {
+                        "datasource": {
+                            "uid": "URWtAuunz"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "hide": false,
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select summary from jobs\nWHERE\n  district_short_code = '$districtShortCode'AND\n  $__timeFilter(created_at)\n  order by created_at desc limit 1;",
+                        "refId": "B",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    },
+                    {
+                        "datasource": {
+                            "uid": "E_01tCunz"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "hide": false,
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select summary from jobs\nWHERE\n  district_short_code = '$districtShortCode'AND\n  $__timeFilter(started_at)\n  order by created_at desc limit 1;\n  \n",
+                        "refId": "C",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "District Summary",
+                "transformations": [
+                    {
+                        "id": "extractFields",
+                        "options": {
+                            "format": "auto",
+                            "replace": true,
+                            "source": "summary"
+                        }
+                    },
+                    {
+                        "id": "concatenate",
+                        "options": {
+                            "frameNameLabel": "frame",
+                            "frameNameMode": "drop"
+                        }
+                    }
+                ],
+                "type": "table"
+            },
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "QalHUc67k"
+                },
+                "description": "WIP - will contain DAO",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "inspect": false
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 5,
+                    "w": 6,
+                    "x": 0,
+                    "y": 6
+                },
+                "id": 10,
+                "options": {
+                    "footer": {
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "QalHUc67k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "SELECT email, username, role from profiles_user\nWHERE\nrole='DISTRICT_OWNER' AND \ndistrict_id=(\n  SELECT\n    id\n  FROM profiles_district\n  WHERE short_code='$districtShortCode'\n)\nORDER BY 1\n",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "District Admin Contact Details",
+                "transformations": [
+                    {
+                        "id": "organize",
+                        "options": {
+                            "excludeByName": {},
+                            "indexByName": {},
+                            "renameByName": {
+                                "email": "Email",
+                                "role": "Role",
+                                "username": "Username"
+                            }
+                        }
+                    },
+                    {
+                        "id": "filterFieldsByName",
+                        "options": {
+                            "include": {
+                                "names": [
+                                    "Email",
+                                    "Username"
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "type": "table"
+            },
+            {
+                "datasource": {
+                    "type": "datasource",
+                    "uid": "grafana"
+                },
+                "description": "WIP - district details for name shortcode year etc.",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "inspect": false
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 5,
+                    "w": 6,
+                    "x": 6,
+                    "y": 6
+                },
+                "id": 12,
+                "options": {
+                    "footer": {
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "datasource",
+                            "uid": "grafana"
+                        },
+                        "refId": "A"
+                    }
+                ],
+                "title": "District Details",
+                "type": "table"
+            },
+            {
+                "datasource": {
+                    "type": "datasource",
+                    "uid": "-- Mixed --"
+                },
+                "description": "",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "mappings": [],
+                        "max": 1,
+                        "min": 0,
+                        "thresholds": {
+                            "mode": "percentage",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "#EAB839",
+                                    "value": 10
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 40
+                                }
+                            ]
+                        },
+                        "unit": "percentunit"
+                    },
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "Completed Rate"
+                            },
+                            "properties": [
+                                {
+                                    "id": "thresholds",
+                                    "value": {
+                                        "mode": "percentage",
+                                        "steps": [
+                                            {
+                                                "color": "red",
+                                                "value": null
+                                            },
+                                            {
+                                                "color": "dark-yellow",
+                                                "value": 70
+                                            },
+                                            {
+                                                "color": "green",
+                                                "value": 90
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "gridPos": {
+                    "h": 6,
+                    "w": 6,
+                    "x": 12,
+                    "y": 8
+                },
+                "id": 14,
+                "options": {
+                    "orientation": "vertical",
+                    "reduceOptions": {
+                        "calcs": [
+                            "lastNotNull"
+                        ],
+                        "fields": "",
+                        "values": false
+                    },
+                    "showThresholdLabels": false,
+                    "showThresholdMarkers": true
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "E_01tCunz"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "SELECT\n  status, count(\"status\") as \"count\"\nFROM\n  jobs\nWHERE\n  status in ('completed', 'errored', 'aborted') and district_short_code = '$districtShortCode'\n  group by 1",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    },
+                    {
+                        "datasource": {
+                            "uid": "URWtAuunz"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "hide": false,
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "SELECT\n  status, count(\"status\") as \"count\"\nFROM\n  jobs\nWHERE\n  status in ('completed', 'errored', 'aborted') and district_short_code = '$districtShortCode'\n  group by 1",
+                        "refId": "B",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    },
+                    {
+                        "datasource": {
+                            "uid": "V4UH5jX7k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "hide": false,
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "SELECT\n  status, count(\"status\") as \"count\"\nFROM\n  jobs\nWHERE\n  status in ('completed', 'errored', 'aborted') and district_short_code = '$districtShortCode'\n  group by 1",
+                        "refId": "C",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "District Rostering Error Rate",
+                "transformations": [
+                    {
+                        "id": "merge",
+                        "options": {}
+                    },
+                    {
+                        "id": "rowsToFields",
+                        "options": {}
+                    },
+                    {
+                        "id": "calculateField",
+                        "options": {
+                            "alias": "total",
+                            "mode": "reduceRow",
+                            "reduce": {
+                                "include": [
+                                    "errored",
+                                    "completed",
+                                    "aborted"
+                                ],
+                                "reducer": "sum"
+                            }
+                        }
+                    },
+                    {
+                        "id": "calculateField",
+                        "options": {
+                            "binary": {
+                                "left": "errored",
+                                "operator": "/",
+                                "reducer": "sum",
+                                "right": "total"
+                            },
+                            "mode": "binary",
+                            "reduce": {
+                                "reducer": "sum"
+                            }
+                        }
+                    },
+                    {
+                        "id": "calculateField",
+                        "options": {
+                            "binary": {
+                                "left": "aborted",
+                                "operator": "/",
+                                "reducer": "sum",
+                                "right": "total"
+                            },
+                            "mode": "binary",
+                            "reduce": {
+                                "reducer": "sum"
+                            }
+                        }
+                    },
+                    {
+                        "id": "calculateField",
+                        "options": {
+                            "binary": {
+                                "left": "completed",
+                                "operator": "/",
+                                "reducer": "sum",
+                                "right": "total"
+                            },
+                            "mode": "binary",
+                            "reduce": {
+                                "reducer": "sum"
+                            }
+                        }
+                    },
+                    {
+                        "id": "organize",
+                        "options": {
+                            "excludeByName": {
+                                "aborted": true,
+                                "completed": true,
+                                "errored": true,
+                                "errored + completed": true,
+                                "errored / errored + completed": false,
+                                "percentageFail": true,
+                                "total": true
+                            },
+                            "indexByName": {
+                                "aborted": 2,
+                                "aborted / total": 6,
+                                "completed": 1,
+                                "completed / total": 4,
+                                "errored": 0,
+                                "errored / total": 5,
+                                "total": 3
+                            },
+                            "renameByName": {
+                                "aborted / total": "Aborted Rate",
+                                "completed / total": "Completed Rate",
+                                "errored / total": "Error Rate"
+                            }
+                        }
+                    }
+                ],
+                "type": "gauge"
+            },
+            {
+                "datasource": {
+                    "type": "datasource",
+                    "uid": "-- Mixed --"
+                },
+                "description": "",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "mappings": [],
+                        "max": 3600,
+                        "min": 0,
+                        "noValue": "Pending",
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "#EAB839",
+                                    "value": 1800
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 2700
+                                }
+                            ]
+                        },
+                        "unit": "s"
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 6,
+                    "w": 6,
+                    "x": 18,
+                    "y": 8
+                },
+                "id": 16,
+                "options": {
+                    "orientation": "auto",
+                    "reduceOptions": {
+                        "calcs": [
+                            "lastNotNull"
+                        ],
+                        "fields": "",
+                        "values": false
+                    },
+                    "showThresholdLabels": false,
+                    "showThresholdMarkers": true
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "E_01tCunz"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select EXTRACT(EPOCH FROM (ended_at - created_at)) as \"Most recent job run\", 'CSV' as \"Source\" from jobs\nWHERE\n  district_short_code='$districtShortCode'\nORDER BY created_at desc\nlimit 1;",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    },
+                    {
+                        "datasource": {
+                            "uid": "E_01tCunz"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "hide": false,
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select avg(EXTRACT(EPOCH FROM (ended_at - created_at))) as \"Average time to process\", 'CSV' as \"Source\" from jobs\nWHERE\n  district_short_code='$districtShortCode'\n  and $__timeFilter(created_at);",
+                        "refId": "B",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    },
+                    {
+                        "datasource": {
+                            "uid": "URWtAuunz"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "hide": false,
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select EXTRACT(EPOCH FROM (completed_at - started_at)) as \"Most recent job run\", 'Clever' as \"Source\" from jobs\nWHERE\n  district_short_code='$districtShortCode'\nORDER BY created_at desc\nlimit 1;",
+                        "refId": "C",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    },
+                    {
+                        "datasource": {
+                            "uid": "URWtAuunz"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "hide": false,
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select avg(EXTRACT(EPOCH FROM (completed_at - started_at))) as \"Average time to process\", 'Clever' as \"Source\" from jobs\nWHERE\n  district_short_code='$districtShortCode'and $__timeFilter(started_at);",
+                        "refId": "D",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    },
+                    {
+                        "datasource": {
+                            "uid": "V4UH5jX7k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "hide": false,
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select EXTRACT(EPOCH FROM (completed_at - started_at)) as \"Most recent job run\", 'Classlink' as \"Source\" from jobs\nWHERE\n  district_short_code='$districtShortCode' \nORDER BY created_at desc\nlimit 1;",
+                        "refId": "E",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    },
+                    {
+                        "datasource": {
+                            "uid": "V4UH5jX7k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "hide": false,
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select avg(EXTRACT(EPOCH FROM (completed_at - started_at))) as \"Average time to process\", 'Classlink' as \"Source\" from jobs\nWHERE\n  district_short_code='$districtShortCode'and $__timeFilter(started_at);",
+                        "refId": "F",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Average and current processing times",
+                "transformations": [
+                    {
+                        "id": "merge",
+                        "options": {}
+                    },
+                    {
+                        "id": "organize",
+                        "options": {
+                            "excludeByName": {},
+                            "indexByName": {
+                                "Average time to process": 2,
+                                "Most recent job run": 1,
+                                "Source": 0
+                            },
+                            "renameByName": {}
+                        }
+                    }
+                ],
+                "type": "gauge"
+            },
+            {
+                "datasource": {
+                    "type": "datasource",
+                    "uid": "-- Mixed --"
+                },
+                "description": "",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "filterable": true,
+                            "inspect": false
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "Time to process"
+                            },
+                            "properties": [
+                                {
+                                    "id": "unit",
+                                    "value": "s"
+                                },
+                                {
+                                    "id": "custom.hidden",
+                                    "value": false
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "Created At"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.hidden",
+                                    "value": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "gridPos": {
+                    "h": 7,
+                    "w": 12,
+                    "x": 0,
+                    "y": 11
+                },
+                "id": 4,
+                "options": {
+                    "footer": {
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "frameIndex": 2,
+                    "showHeader": true,
+                    "sortBy": []
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "uid": "V4UH5jX7k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "hide": false,
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select id as \"Job Id\", district_short_code as \"Shortcode\", status as \"Status\", created_at as \"Created At\", started_at as \"Started At\", 'Classlink' as \"Source\", EXTRACT(EPOCH FROM (completed_at - started_at)) as \"Time to process\" from jobs\nWHERE\n  district_short_code='$districtShortCode'\n  order by started_at desc\nlimit 10;",
+                        "refId": "B",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    },
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "E_01tCunz"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select id as \"Job Id\", district_short_code as \"Shortcode\", status as \"Status\", created_at as \"Started At\", 'CSV' as \"Source\", EXTRACT(EPOCH FROM (ended_at - created_at)) as \"Time to process\" from jobs\nWHERE\n  district_short_code='$districtShortCode'\n  order by created_at desc\nlimit 10;",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    },
+                    {
+                        "datasource": {
+                            "uid": "URWtAuunz"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "hide": false,
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select id as \"Job Id\", district_short_code as \"Shortcode\", status as \"Status\", created_at as \"Created At\",  started_at as \"Started At\", 'Clever' as \"Source\", EXTRACT(EPOCH FROM (completed_at - started_at)) as \"Time to process\"   from jobs\nWHERE\n  district_short_code='$districtShortCode'\n  order by started_at desc\nlimit 10;",
+                        "refId": "C",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Last 10 jobs",
+                "transformations": [
+                    {
+                        "id": "merge",
+                        "options": {}
+                    },
+                    {
+                        "id": "sortBy",
+                        "options": {
+                            "fields": {},
+                            "sort": [
+                                {
+                                    "desc": true,
+                                    "field": "Started At"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "id": "organize",
+                        "options": {
+                            "excludeByName": {},
+                            "indexByName": {
+                                "Created At": 3,
+                                "Job Id": 0,
+                                "Shortcode": 1,
+                                "Source": 6,
+                                "Started At": 4,
+                                "Status": 2,
+                                "Time to process": 5
+                            },
+                            "renameByName": {}
+                        }
+                    }
+                ],
+                "type": "table"
+            },
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "SIDP85e7z"
+                },
+                "description": "WIP",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "inspect": false
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 4,
+                    "w": 12,
+                    "x": 12,
+                    "y": 14
+                },
+                "id": 8,
+                "options": {
+                    "footer": {
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "SIDP85e7z"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select \npr.\"name\", \"shortCode\", \"isActive\", \"salesforceAccount\", \"expiresOn\", \"isTest\", \"isTrial\", \"purchaserId\", \"opportunityType\", \"purchasedAt\", \"salesforceOpportunity\", p.\"isAvailable\", pv.\"productVariantCode\", \"productCode\", pv.\"name\" as \"prodname\", \"description\", pv.\"isAvailable\" as \"Variant Is available\", \"tocsApp\", \"territoryCode\", \"territoryName\"\nfrom \"Purchaser\" pr, \"Purchase\" p, \"ProductVariant\" pv where pr.\"shortCode\" = '$districtShortCode' and p.\"purchaserId\"=pr.\"id\" and pv.\"productVariantCode\" = p.\"productVariantCode\";\n",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Subscription Details",
+                "transformations": [
+                    {
+                        "id": "organize",
+                        "options": {}
+                    }
+                ],
+                "type": "table"
+            },
+            {
+                "datasource": {
+                    "type": "datasource",
+                    "uid": "-- Mixed --"
+                },
+                "description": "",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "inspect": false
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "username"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 328
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "id"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 301
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "is_active"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 84
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "is_staff"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 77
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "email"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 219
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "gridPos": {
+                    "h": 8,
+                    "w": 24,
+                    "x": 0,
+                    "y": 18
+                },
+                "id": 21,
+                "options": {
+                    "footer": {
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true,
+                    "sortBy": []
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "QalHUc67k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "\nselect * from public.profiles_user where district_id in (select id from public.profiles_district\nWHERE short_code = '$districtShortCode');",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "District Users",
+                "transformations": [
+                    {
+                        "id": "organize",
+                        "options": {
+                            "excludeByName": {
+                                "password": true
+                            },
+                            "indexByName": {},
+                            "renameByName": {}
+                        }
+                    }
+                ],
+                "type": "table"
+            }
+        ],
+        "refresh": "",
+        "schemaVersion": 37,
+        "style": "dark",
+        "tags": [
+            "rostering"
+        ],
+        "templating": {
+            "list": [
+                {
+                    "current": {
+                        "selected": false,
+                        "text": "GGUSD",
+                        "value": "GGUSD"
+                    },
+                    "hide": 0,
+                    "label": "District Short Code",
+                    "name": "districtShortCode",
+                    "options": [
+                        {
+                            "selected": true,
+                            "text": "GGUSD",
+                            "value": "GGUSD"
+                        }
+                    ],
+                    "query": "GGUSD",
+                    "skipUrlSync": false,
+                    "type": "textbox"
+                }
+            ]
+        },
+        "time": {
+            "from": "now-30d",
+            "to": "now"
+        },
+        "timepicker": {},
+        "timezone": "",
+        "title": "District Overview",
+        "uid": "0p6UN5e7z",
+        "version": 61,
+        "weekStart": ""
+    }
+}
