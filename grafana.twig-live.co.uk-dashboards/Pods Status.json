@@ -1,0 +1,537 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": true,
+        "canEdit": true,
+        "canAdmin": true,
+        "canStar": true,
+        "canDelete": true,
+        "slug": "pods-status",
+        "url": "/d/6T7Jr5e7k/pods-status",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2022-07-06T16:07:44Z",
+        "updated": "2022-08-30T15:40:56Z",
+        "updatedBy": "gmasucci@twigeducation.com",
+        "createdBy": "admin",
+        "version": 23,
+        "hasAcl": false,
+        "isFolder": false,
+        "folderId": 0,
+        "folderUid": "",
+        "folderTitle": "General",
+        "folderUrl": "",
+        "provisioned": false,
+        "provisionedExternalId": "",
+        "annotationsPermissions": {
+            "dashboard": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            },
+            "organization": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            }
+        },
+        "publicDashboardAccessToken": "",
+        "publicDashboardEnabled": false
+    },
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": "-- Grafana --",
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "target": {
+                        "limit": 100,
+                        "matchAny": false,
+                        "tags": [],
+                        "type": "dashboard"
+                    },
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "fiscalYearStartMonth": 0,
+        "graphTooltip": 0,
+        "id": 35,
+        "iteration": 1661874052698,
+        "links": [],
+        "liveNow": false,
+        "panels": [
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${Datasource}"
+                },
+                "description": "Shows the number of Running pods in a cluster",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "fixedColor": "green",
+                            "mode": "fixed"
+                        },
+                        "mappings": [],
+                        "noValue": "No Value",
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 50
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 5,
+                    "w": 2,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 6,
+                "options": {
+                    "colorMode": "value",
+                    "graphMode": "area",
+                    "justifyMode": "auto",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                        "calcs": [
+                            "lastNotNull"
+                        ],
+                        "fields": "/^Value$/",
+                        "values": true
+                    },
+                    "textMode": "auto"
+                },
+                "pluginVersion": "8.3.4",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "prometheus",
+                            "uid": "${Datasource}"
+                        },
+                        "exemplar": false,
+                        "expr": "SUM(kube_pod_status_phase{phase=\"Running\"})",
+                        "format": "table",
+                        "instant": true,
+                        "interval": "",
+                        "intervalFactor": 1,
+                        "legendFormat": "",
+                        "refId": "A"
+                    }
+                ],
+                "title": "Running Pods",
+                "type": "stat"
+            },
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${Datasource}"
+                },
+                "description": "Shows the number of failed pods in a cluster",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "fixedColor": "orange",
+                            "mode": "fixed"
+                        },
+                        "mappings": [],
+                        "noValue": "No Value",
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 50
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 5,
+                    "w": 2,
+                    "x": 2,
+                    "y": 0
+                },
+                "id": 3,
+                "options": {
+                    "colorMode": "value",
+                    "graphMode": "area",
+                    "justifyMode": "auto",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                        "calcs": [
+                            "lastNotNull"
+                        ],
+                        "fields": "/^Value$/",
+                        "values": true
+                    },
+                    "textMode": "auto"
+                },
+                "pluginVersion": "8.3.4",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "prometheus",
+                            "uid": "${Datasource}"
+                        },
+                        "exemplar": false,
+                        "expr": "SUM(kube_pod_status_phase{phase=\"Pending\"})",
+                        "format": "table",
+                        "instant": true,
+                        "interval": "",
+                        "intervalFactor": 1,
+                        "legendFormat": "",
+                        "refId": "A"
+                    }
+                ],
+                "title": "Pending Pods",
+                "type": "stat"
+            },
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${Datasource}"
+                },
+                "description": "Shows the number of failed pods in a cluster",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "fixedColor": "purple",
+                            "mode": "fixed"
+                        },
+                        "mappings": [],
+                        "noValue": "No Value",
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 50
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 5,
+                    "w": 2,
+                    "x": 4,
+                    "y": 0
+                },
+                "id": 4,
+                "options": {
+                    "colorMode": "value",
+                    "graphMode": "area",
+                    "justifyMode": "auto",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                        "calcs": [
+                            "lastNotNull"
+                        ],
+                        "fields": "/^Value$/",
+                        "values": true
+                    },
+                    "textMode": "auto"
+                },
+                "pluginVersion": "8.3.4",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "prometheus",
+                            "uid": "${Datasource}"
+                        },
+                        "exemplar": false,
+                        "expr": "SUM(kube_pod_status_phase{phase=\"Unknown\"})",
+                        "format": "table",
+                        "instant": true,
+                        "interval": "",
+                        "intervalFactor": 1,
+                        "legendFormat": "",
+                        "refId": "A"
+                    }
+                ],
+                "title": "Unknown Pods",
+                "type": "stat"
+            },
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${Datasource}"
+                },
+                "description": "Shows the number of failed pods in a cluster",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "fixedColor": "dark-red",
+                            "mode": "fixed"
+                        },
+                        "mappings": [],
+                        "noValue": "No Value",
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 50
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 5,
+                    "w": 2,
+                    "x": 6,
+                    "y": 0
+                },
+                "id": 2,
+                "options": {
+                    "colorMode": "value",
+                    "graphMode": "area",
+                    "justifyMode": "auto",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                        "calcs": [
+                            "lastNotNull"
+                        ],
+                        "fields": "/^Value$/",
+                        "values": true
+                    },
+                    "textMode": "auto"
+                },
+                "pluginVersion": "8.3.4",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "prometheus",
+                            "uid": "${Datasource}"
+                        },
+                        "exemplar": false,
+                        "expr": "SUM(kube_pod_status_phase{phase!=\"Failed\"})",
+                        "format": "table",
+                        "instant": true,
+                        "interval": "",
+                        "intervalFactor": 1,
+                        "legendFormat": "",
+                        "refId": "A"
+                    }
+                ],
+                "title": "Failed Pods",
+                "type": "stat"
+            },
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${Datasource}"
+                },
+                "description": "Shows the number of failed pods in a cluster",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "fixedColor": "blue",
+                            "mode": "fixed"
+                        },
+                        "mappings": [],
+                        "noValue": "No Value",
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 50
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 5,
+                    "w": 2,
+                    "x": 8,
+                    "y": 0
+                },
+                "id": 5,
+                "options": {
+                    "colorMode": "value",
+                    "graphMode": "area",
+                    "justifyMode": "auto",
+                    "orientation": "auto",
+                    "reduceOptions": {
+                        "calcs": [
+                            "lastNotNull"
+                        ],
+                        "fields": "/^Value$/",
+                        "values": true
+                    },
+                    "textMode": "auto"
+                },
+                "pluginVersion": "8.3.4",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "prometheus",
+                            "uid": "${Datasource}"
+                        },
+                        "exemplar": false,
+                        "expr": "SUM(kube_pod_status_phase{phase=\"Succeeded\"})",
+                        "format": "table",
+                        "instant": true,
+                        "interval": "",
+                        "intervalFactor": 1,
+                        "legendFormat": "",
+                        "refId": "A"
+                    }
+                ],
+                "title": "Succeeded Pods",
+                "type": "stat"
+            },
+            {
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${Datasource}"
+                },
+                "description": "",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "fixedColor": "purple",
+                            "mode": "continuous-GrYlRd"
+                        },
+                        "mappings": [],
+                        "noValue": "No Value",
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 50
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 18,
+                    "w": 15,
+                    "x": 0,
+                    "y": 5
+                },
+                "id": 7,
+                "options": {
+                    "orientation": "auto",
+                    "reduceOptions": {
+                        "calcs": [
+                            "lastNotNull"
+                        ],
+                        "fields": "",
+                        "limit": 1000,
+                        "values": true
+                    },
+                    "showThresholdLabels": false,
+                    "showThresholdMarkers": true,
+                    "text": {
+                        "titleSize": 10
+                    }
+                },
+                "pluginVersion": "8.3.4",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "prometheus",
+                            "uid": "${Datasource}"
+                        },
+                        "exemplar": false,
+                        "expr": "kube_pod_container_status_restarts_total!=0",
+                        "format": "time_series",
+                        "instant": true,
+                        "interval": "",
+                        "intervalFactor": 2,
+                        "legendFormat": "{{namespace}} {{pod}}",
+                        "refId": "A"
+                    }
+                ],
+                "title": "Pods restarts",
+                "type": "gauge"
+            }
+        ],
+        "refresh": "",
+        "schemaVersion": 34,
+        "style": "dark",
+        "tags": [
+            "kubernetes",
+            "reporting"
+        ],
+        "templating": {
+            "list": [
+                {
+                    "current": {
+                        "selected": false,
+                        "text": "eks8",
+                        "value": "eks8"
+                    },
+                    "hide": 0,
+                    "includeAll": false,
+                    "multi": false,
+                    "name": "Datasource",
+                    "options": [],
+                    "query": "prometheus",
+                    "queryValue": "",
+                    "refresh": 1,
+                    "regex": "",
+                    "skipUrlSync": false,
+                    "type": "datasource"
+                }
+            ]
+        },
+        "time": {
+            "from": "now-6h",
+            "to": "now"
+        },
+        "timepicker": {},
+        "timezone": "",
+        "title": "Pods Status",
+        "uid": "6T7Jr5e7k",
+        "version": 23,
+        "weekStart": ""
+    }
+}

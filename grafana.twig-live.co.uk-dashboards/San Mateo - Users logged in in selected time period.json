@@ -1,0 +1,263 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": true,
+        "canEdit": true,
+        "canAdmin": true,
+        "canStar": true,
+        "canDelete": true,
+        "slug": "san-mateo-users-logged-in-in-selected-time-period",
+        "url": "/d/ElYeRZoVk/san-mateo-users-logged-in-in-selected-time-period",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2023-01-17T16:24:19Z",
+        "updated": "2023-01-17T17:24:56Z",
+        "updatedBy": "gmasucci@twigeducation.com",
+        "createdBy": "gmasucci@twigeducation.com",
+        "version": 4,
+        "hasAcl": false,
+        "isFolder": false,
+        "folderId": 38,
+        "folderUid": "CP3_Oum4z",
+        "folderTitle": "Rostering",
+        "folderUrl": "/dashboards/f/CP3_Oum4z/rostering",
+        "provisioned": false,
+        "provisionedExternalId": "",
+        "annotationsPermissions": {
+            "dashboard": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            },
+            "organization": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            }
+        },
+        "publicDashboardAccessToken": "",
+        "publicDashboardEnabled": false
+    },
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": {
+                        "type": "datasource",
+                        "uid": "grafana"
+                    },
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "target": {
+                        "limit": 100,
+                        "matchAny": false,
+                        "tags": [],
+                        "type": "dashboard"
+                    },
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "fiscalYearStartMonth": 0,
+        "graphTooltip": 0,
+        "id": 54,
+        "links": [],
+        "liveNow": false,
+        "panels": [
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "QalHUc67k"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "filterable": true,
+                            "inspect": false
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "Last logged in epoch"
+                            },
+                            "properties": [
+                                {
+                                    "id": "mappings",
+                                    "value": [
+                                        {
+                                            "options": {
+                                                "pattern": "(?<bob>[0-9]+(,* [0-9]+)*)",
+                                                "result": {
+                                                    "index": 0,
+                                                    "text": "$bob"
+                                                }
+                                            },
+                                            "type": "regex"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "gridPos": {
+                    "h": 19,
+                    "w": 24,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 3,
+                "options": {
+                    "footer": {
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true,
+                    "sortBy": []
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "QalHUc67k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select distinct(pu.email), pu.role, pd.name, pu.last_login from profiles_user pu \njoin profiles_district pd on pu.district_id=pd.id\nwhere pu.role in ('SCHOOL_ADMIN','DISTRICT_OWNER','TEACHER', 'STUDENT') \nand pu.is_active = true\nand pu.last_login is not NULL\nand pu.is_test_user = false\nand pu.email not like '%twigeducation%'\nand pu.email not like '%twig-%'\nand pu.district_id in ('0ca5349d-3aa2-416f-8c28-b978bbddc283')\nand  $__timeFilter(last_login)\n\n\n",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Users logged in since... ($userCount)",
+                "transformations": [
+                    {
+                        "id": "filterByValue",
+                        "options": {
+                            "filters": [
+                                {
+                                    "config": {
+                                        "id": "isNotNull",
+                                        "options": {}
+                                    },
+                                    "fieldName": "email"
+                                }
+                            ],
+                            "match": "any",
+                            "type": "include"
+                        }
+                    },
+                    {
+                        "id": "filterByValue",
+                        "options": {
+                            "filters": [
+                                {
+                                    "config": {
+                                        "id": "equal",
+                                        "options": {
+                                            "value": ""
+                                        }
+                                    },
+                                    "fieldName": "email"
+                                }
+                            ],
+                            "match": "any",
+                            "type": "exclude"
+                        }
+                    }
+                ],
+                "type": "table"
+            }
+        ],
+        "refresh": "",
+        "schemaVersion": 37,
+        "style": "dark",
+        "tags": [
+            "rostering",
+            "reporting"
+        ],
+        "templating": {
+            "list": [
+                {
+                    "current": {
+                        "selected": false,
+                        "text": "11011",
+                        "value": "11011"
+                    },
+                    "datasource": {
+                        "type": "postgres",
+                        "uid": "QalHUc67k"
+                    },
+                    "definition": "select count(pu.email) from profiles_user pu \nwhere pu.role in ('SCHOOL_ADMIN','DISTRICT_OWNER','TEACHER') \nand pu.is_active = true\nand pu.last_login is not NULL\nand pu.is_test_user = false\nand pu.email not like '%twigeducation%'\nand pu.email not like '%twig-%'\nand pu.district_id not in ('d6eebbad-4a3c-4d01-9af0-072f20644556', 'c19710ea-467c-4c5c-a4a8-4742ffa4aab4', 'bf607510-c4ee-4714-8456-235c2bffde7b', 'afa9facb-34bb-4c4e-8352-ac7030cb4299', 'a47ce39d-bf20-438b-83ef-902e026f42d7', 'a2892237-afd3-4c82-95cb-46dd077a4aee', '993bd92a-9e13-43b9-b727-b8203d7f433d', '454487af-d9b8-4d32-b82a-279dc519d5a9', '3450c2c1-a6f6-4f86-9f5d-123c4e84c9e7', '0fc189bd-2979-4455-9de1-98f69492fd67', '3f201d68-1565-46a2-a396-826b6991829b', '77204ccd-ee65-445b-8859-03aa6ec0329d', 'e57427bf-c5b3-4f87-9d05-85c3df577e56', '7879dd5f-eb86-4b4e-8f05-51b1b96d851a')\nand  $__timeFilter(last_login)\n",
+                    "hide": 2,
+                    "includeAll": false,
+                    "multi": false,
+                    "name": "userCount",
+                    "options": [],
+                    "query": "select count(pu.email) from profiles_user pu \nwhere pu.role in ('SCHOOL_ADMIN','DISTRICT_OWNER','TEACHER') \nand pu.is_active = true\nand pu.last_login is not NULL\nand pu.is_test_user = false\nand pu.email not like '%twigeducation%'\nand pu.email not like '%twig-%'\nand pu.district_id not in ('d6eebbad-4a3c-4d01-9af0-072f20644556', 'c19710ea-467c-4c5c-a4a8-4742ffa4aab4', 'bf607510-c4ee-4714-8456-235c2bffde7b', 'afa9facb-34bb-4c4e-8352-ac7030cb4299', 'a47ce39d-bf20-438b-83ef-902e026f42d7', 'a2892237-afd3-4c82-95cb-46dd077a4aee', '993bd92a-9e13-43b9-b727-b8203d7f433d', '454487af-d9b8-4d32-b82a-279dc519d5a9', '3450c2c1-a6f6-4f86-9f5d-123c4e84c9e7', '0fc189bd-2979-4455-9de1-98f69492fd67', '3f201d68-1565-46a2-a396-826b6991829b', '77204ccd-ee65-445b-8859-03aa6ec0329d', 'e57427bf-c5b3-4f87-9d05-85c3df577e56', '7879dd5f-eb86-4b4e-8f05-51b1b96d851a')\nand  $__timeFilter(last_login)\n",
+                    "refresh": 2,
+                    "regex": "",
+                    "skipUrlSync": false,
+                    "sort": 0,
+                    "type": "query"
+                }
+            ]
+        },
+        "time": {
+            "from": "now-30d",
+            "to": "now"
+        },
+        "timepicker": {},
+        "timezone": "",
+        "title": "San Mateo - Users logged in in selected time period",
+        "uid": "ElYeRZoVk",
+        "version": 4,
+        "weekStart": ""
+    }
+}

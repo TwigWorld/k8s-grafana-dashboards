@@ -1,0 +1,47 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": true,
+        "canEdit": true,
+        "canAdmin": true,
+        "canStar": true,
+        "canDelete": true,
+        "slug": "kubernetes",
+        "url": "/dashboards/f/q1D3OXi4z/kubernetes",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2022-08-18T13:36:02Z",
+        "updated": "2022-08-18T13:36:02Z",
+        "updatedBy": "gmasucci@twigeducation.com",
+        "createdBy": "gmasucci@twigeducation.com",
+        "version": 1,
+        "hasAcl": false,
+        "isFolder": true,
+        "folderId": 0,
+        "folderUid": "",
+        "folderTitle": "General",
+        "folderUrl": "",
+        "provisioned": false,
+        "provisionedExternalId": "",
+        "annotationsPermissions": {
+            "dashboard": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            },
+            "organization": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            }
+        },
+        "publicDashboardAccessToken": "",
+        "publicDashboardEnabled": false
+    },
+    "dashboard": {
+        "id": 39,
+        "schemaVersion": 17,
+        "title": "Kubernetes",
+        "uid": "q1D3OXi4z",
+        "version": 1
+    }
+}

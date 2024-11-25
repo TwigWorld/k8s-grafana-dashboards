@@ -1,0 +1,284 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": true,
+        "canEdit": true,
+        "canAdmin": true,
+        "canStar": true,
+        "canDelete": true,
+        "slug": "users-logged-in-in-selected-time-period-by-district-id",
+        "url": "/d/6zcJk-pIz/users-logged-in-in-selected-time-period-by-district-id",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2024-01-31T17:32:44Z",
+        "updated": "2024-02-01T11:02:01Z",
+        "updatedBy": "abahanda@twigeducation.com",
+        "createdBy": "admin",
+        "version": 8,
+        "hasAcl": false,
+        "isFolder": false,
+        "folderId": 38,
+        "folderUid": "CP3_Oum4z",
+        "folderTitle": "Rostering",
+        "folderUrl": "/dashboards/f/CP3_Oum4z/rostering",
+        "provisioned": false,
+        "provisionedExternalId": "",
+        "annotationsPermissions": {
+            "dashboard": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            },
+            "organization": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            }
+        },
+        "publicDashboardAccessToken": "",
+        "publicDashboardEnabled": false
+    },
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": {
+                        "type": "datasource",
+                        "uid": "grafana"
+                    },
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "target": {
+                        "limit": 100,
+                        "matchAny": false,
+                        "tags": [],
+                        "type": "dashboard"
+                    },
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "description": "The dashboard highlights the number and details of users that logged in within a given time frame.",
+        "editable": true,
+        "fiscalYearStartMonth": 0,
+        "graphTooltip": 0,
+        "id": 70,
+        "links": [],
+        "liveNow": false,
+        "panels": [
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "QalHUc67k"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "filterable": true,
+                            "inspect": false
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "Last logged in epoch"
+                            },
+                            "properties": [
+                                {
+                                    "id": "mappings",
+                                    "value": [
+                                        {
+                                            "options": {
+                                                "pattern": "(?<bob>[0-9]+(,* [0-9]+)*)",
+                                                "result": {
+                                                    "index": 0,
+                                                    "text": "$bob"
+                                                }
+                                            },
+                                            "type": "regex"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "gridPos": {
+                    "h": 19,
+                    "w": 24,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 3,
+                "options": {
+                    "footer": {
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true,
+                    "sortBy": []
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "QalHUc67k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select distinct(pu.email), pu.role, pd.name, pu.last_login from profiles_user pu \njoin profiles_district pd on pu.district_id=pd.id\nwhere pu.role in ('SCHOOL_ADMIN','DISTRICT_OWNER','TEACHER', 'STUDENT') \nand pu.is_active = true\nand pu.last_login is not NULL\nand pu.is_test_user = false\nand pu.email not like '%twigeducation%'\nand pu.email not like '%twig-%'\nand pu.district_id = '[[districtIdIn]]'\nand  $__timeFilter(last_login)\n\n\n",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Users logged in {$userCount}",
+                "transformations": [
+                    {
+                        "id": "filterByValue",
+                        "options": {
+                            "filters": [
+                                {
+                                    "config": {
+                                        "id": "isNotNull",
+                                        "options": {}
+                                    },
+                                    "fieldName": "email"
+                                }
+                            ],
+                            "match": "any",
+                            "type": "include"
+                        }
+                    },
+                    {
+                        "id": "filterByValue",
+                        "options": {
+                            "filters": [
+                                {
+                                    "config": {
+                                        "id": "equal",
+                                        "options": {
+                                            "value": ""
+                                        }
+                                    },
+                                    "fieldName": "email"
+                                }
+                            ],
+                            "match": "any",
+                            "type": "exclude"
+                        }
+                    }
+                ],
+                "type": "table"
+            }
+        ],
+        "refresh": false,
+        "schemaVersion": 37,
+        "style": "dark",
+        "tags": [
+            "rostering",
+            "reporting"
+        ],
+        "templating": {
+            "list": [
+                {
+                    "current": {
+                        "selected": false,
+                        "text": "59",
+                        "value": "59"
+                    },
+                    "datasource": {
+                        "type": "postgres",
+                        "uid": "QalHUc67k"
+                    },
+                    "definition": "select count(pu.email) from profiles_user pu \nwhere pu.role in ('SCHOOL_ADMIN','DISTRICT_OWNER','TEACHER') \nand pu.is_active = true\nand pu.last_login is not NULL\nand pu.is_test_user = false\nand pu.email not like '%twigeducation%'\nand pu.email not like '%twig-%'\nand pu.district_id = '${districtIdIn}'\nand  $__timeFilter(last_login)\n",
+                    "hide": 2,
+                    "includeAll": false,
+                    "multi": false,
+                    "name": "userCount",
+                    "options": [],
+                    "query": "select count(pu.email) from profiles_user pu \nwhere pu.role in ('SCHOOL_ADMIN','DISTRICT_OWNER','TEACHER') \nand pu.is_active = true\nand pu.last_login is not NULL\nand pu.is_test_user = false\nand pu.email not like '%twigeducation%'\nand pu.email not like '%twig-%'\nand pu.district_id = '${districtIdIn}'\nand  $__timeFilter(last_login)\n",
+                    "refresh": 2,
+                    "regex": "",
+                    "skipUrlSync": false,
+                    "sort": 0,
+                    "type": "query"
+                },
+                {
+                    "current": {
+                        "selected": false,
+                        "text": "",
+                        "value": ""
+                    },
+                    "hide": 0,
+                    "label": "DistrictId from auth",
+                    "name": "districtIdIn",
+                    "options": [
+                        {
+                            "selected": false,
+                            "text": "",
+                            "value": ""
+                        }
+                    ],
+                    "query": "",
+                    "skipUrlSync": false,
+                    "type": "textbox"
+                }
+            ]
+        },
+        "time": {
+            "from": "2024-01-30T14:13:47.000Z",
+            "to": "2024-01-30T15:02:20.000Z"
+        },
+        "timepicker": {},
+        "timezone": "",
+        "title": "Users logged in in selected time period - by district ID",
+        "uid": "6zcJk-pIz",
+        "version": 8,
+        "weekStart": ""
+    }
+}

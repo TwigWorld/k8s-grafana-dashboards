@@ -1,0 +1,548 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": true,
+        "canEdit": true,
+        "canAdmin": true,
+        "canStar": true,
+        "canDelete": true,
+        "slug": "duplicate-social-accounts-found",
+        "url": "/d/-RGVilU4k/duplicate-social-accounts-found",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2023-05-18T11:29:07Z",
+        "updated": "2023-07-05T08:21:51Z",
+        "updatedBy": "gmasucci@twigeducation.com",
+        "createdBy": "dsingh@twigeducation.com",
+        "version": 27,
+        "hasAcl": false,
+        "isFolder": false,
+        "folderId": 38,
+        "folderUid": "CP3_Oum4z",
+        "folderTitle": "Rostering",
+        "folderUrl": "/dashboards/f/CP3_Oum4z/rostering",
+        "provisioned": false,
+        "provisionedExternalId": "",
+        "annotationsPermissions": {
+            "dashboard": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            },
+            "organization": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            }
+        },
+        "publicDashboardAccessToken": "",
+        "publicDashboardEnabled": false
+    },
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": {
+                        "type": "grafana",
+                        "uid": "-- Grafana --"
+                    },
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "target": {
+                        "limit": 100,
+                        "matchAny": false,
+                        "tags": [],
+                        "type": "dashboard"
+                    },
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "fiscalYearStartMonth": 0,
+        "graphTooltip": 0,
+        "id": 64,
+        "links": [],
+        "liveNow": false,
+        "panels": [
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "QalHUc67k"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "filterable": true,
+                            "inspect": false
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "email"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 271
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "id"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 286
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "AuthID"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 330
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "AuthEmail"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 285
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "gridPos": {
+                    "h": 16,
+                    "w": 24,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 2,
+                "options": {
+                    "footer": {
+                        "enablePagination": true,
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true,
+                    "sortBy": []
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "QalHUc67k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select u.id as \"AuthID\", u.email as \"AuthEmail\",u.last_login as \"Last Login\", u.date_joined as \"Date Joined\", s.extra_data  from socialaccount_socialaccount as s left outer join profiles_user as u \non s.user_id=u.id where s.user_id in (\n    select u.id from profiles_user as u inner join socialaccount_socialaccount as s on s.user_id = u.id group by u.id having count(u.id) > 1\n);",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Duplicate social accounts found",
+                "transformations": [
+                    {
+                        "id": "extractFields",
+                        "options": {
+                            "replace": false,
+                            "source": "extra_data"
+                        }
+                    },
+                    {
+                        "id": "organize",
+                        "options": {
+                            "excludeByName": {
+                                "extra_data": true
+                            },
+                            "indexByName": {},
+                            "renameByName": {}
+                        }
+                    }
+                ],
+                "type": "table"
+            },
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "QalHUc67k"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "filterable": true,
+                            "inspect": false,
+                            "minWidth": 150
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "extra_data"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 762
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "email"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 358
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "id"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 506
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "email 2"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 327
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "id 2"
+                            },
+                            "properties": [
+                                {
+                                    "id": "custom.width",
+                                    "value": 243
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "gridPos": {
+                    "h": 5,
+                    "w": 12,
+                    "x": 0,
+                    "y": 16
+                },
+                "id": 4,
+                "options": {
+                    "footer": {
+                        "enablePagination": false,
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true,
+                    "sortBy": []
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "QalHUc67k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "uid",
+                        "rawQuery": true,
+                        "rawSql": "select u.id, u.email, s.extra_data from socialaccount_socialaccount as s inner join profiles_user as u \non s.user_id=u.id where u.id::text='${userGuid}'",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "table": "socialaccount_socialaccount",
+                        "timeColumn": "last_login",
+                        "timeColumnType": "timestamptz",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "User Detail",
+                "transformations": [
+                    {
+                        "id": "extractFields",
+                        "options": {
+                            "source": "extra_data"
+                        }
+                    },
+                    {
+                        "id": "organize",
+                        "options": {
+                            "excludeByName": {
+                                "extra_data": true
+                            },
+                            "indexByName": {},
+                            "renameByName": {}
+                        }
+                    }
+                ],
+                "type": "table"
+            },
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "QalHUc67k"
+                },
+                "description": "",
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "inspect": false
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 5,
+                    "w": 12,
+                    "x": 12,
+                    "y": 16
+                },
+                "id": 6,
+                "options": {
+                    "footer": {
+                        "enablePagination": false,
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "QalHUc67k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select id, email, is_active from profiles_user where email='${isUserActive}';",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Is user Active?",
+                "type": "table"
+            }
+        ],
+        "schemaVersion": 37,
+        "style": "dark",
+        "tags": [
+            "duplicate",
+            "social",
+            "authentication",
+            "rostering"
+        ],
+        "templating": {
+            "list": [
+                {
+                    "current": {
+                        "selected": false,
+                        "text": "",
+                        "value": ""
+                    },
+                    "hide": 0,
+                    "label": "Auth UserId",
+                    "name": "userGuid",
+                    "options": [
+                        {
+                            "selected": true,
+                            "text": "",
+                            "value": ""
+                        }
+                    ],
+                    "query": "",
+                    "skipUrlSync": false,
+                    "type": "textbox"
+                },
+                {
+                    "current": {
+                        "selected": false,
+                        "text": "",
+                        "value": ""
+                    },
+                    "description": "Pls use email address only",
+                    "hide": 0,
+                    "label": "Check if user is active ",
+                    "name": "isUserActive",
+                    "options": [
+                        {
+                            "selected": true,
+                            "text": "",
+                            "value": ""
+                        }
+                    ],
+                    "query": "",
+                    "skipUrlSync": false,
+                    "type": "textbox"
+                }
+            ]
+        },
+        "time": {
+            "from": "now-6h",
+            "to": "now"
+        },
+        "timepicker": {},
+        "timezone": "",
+        "title": "Duplicate social accounts found",
+        "uid": "-RGVilU4k",
+        "version": 27,
+        "weekStart": ""
+    }
+}

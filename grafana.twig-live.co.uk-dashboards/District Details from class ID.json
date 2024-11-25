@@ -1,0 +1,198 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": true,
+        "canEdit": true,
+        "canAdmin": true,
+        "canStar": true,
+        "canDelete": true,
+        "slug": "district-details-from-class-id",
+        "url": "/d/xkdnJIHVz/district-details-from-class-id",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2022-10-24T10:34:05Z",
+        "updated": "2022-10-24T10:54:37Z",
+        "updatedBy": "gmasucci@twigeducation.com",
+        "createdBy": "gmasucci@twigeducation.com",
+        "version": 12,
+        "hasAcl": false,
+        "isFolder": false,
+        "folderId": 38,
+        "folderUid": "CP3_Oum4z",
+        "folderTitle": "Rostering",
+        "folderUrl": "/dashboards/f/CP3_Oum4z/rostering",
+        "provisioned": false,
+        "provisionedExternalId": "",
+        "annotationsPermissions": {
+            "dashboard": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            },
+            "organization": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            }
+        },
+        "publicDashboardAccessToken": "",
+        "publicDashboardEnabled": false
+    },
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": {
+                        "type": "grafana",
+                        "uid": "-- Grafana --"
+                    },
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "target": {
+                        "limit": 100,
+                        "matchAny": false,
+                        "tags": [],
+                        "type": "dashboard"
+                    },
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "fiscalYearStartMonth": 0,
+        "graphTooltip": 0,
+        "id": 53,
+        "links": [],
+        "liveNow": false,
+        "panels": [
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "bFgDkrenz"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "inspect": false
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 8,
+                    "w": 24,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 2,
+                "options": {
+                    "footer": {
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "showHeader": true
+                },
+                "pluginVersion": "9.1.2",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "bFgDkrenz"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select * from public.districts pdis where pdis.district_id =(\nselect district_id from public.orgs po where po.org_id = ( \nselect org_id from public.classes where class_id = '$classId'));",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Get district details for given class ID",
+                "type": "table"
+            }
+        ],
+        "schemaVersion": 37,
+        "style": "dark",
+        "tags": [
+            "district",
+            "rostering"
+        ],
+        "templating": {
+            "list": [
+                {
+                    "current": {
+                        "selected": false,
+                        "text": "b18864c0-30ba-44ca-a37e-2dcf0713c690",
+                        "value": "b18864c0-30ba-44ca-a37e-2dcf0713c690"
+                    },
+                    "hide": 0,
+                    "name": "classId",
+                    "options": [
+                        {
+                            "selected": true,
+                            "text": "",
+                            "value": ""
+                        }
+                    ],
+                    "query": "",
+                    "skipUrlSync": false,
+                    "type": "textbox"
+                }
+            ]
+        },
+        "time": {
+            "from": "now-6h",
+            "to": "now"
+        },
+        "timepicker": {
+            "hidden": true
+        },
+        "timezone": "",
+        "title": "District Details from class ID",
+        "uid": "xkdnJIHVz",
+        "version": 12,
+        "weekStart": ""
+    }
+}

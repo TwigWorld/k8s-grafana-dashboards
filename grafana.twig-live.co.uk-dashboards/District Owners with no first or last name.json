@@ -1,0 +1,202 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": true,
+        "canEdit": true,
+        "canAdmin": true,
+        "canStar": true,
+        "canDelete": true,
+        "slug": "district-owners-with-no-first-or-last-name",
+        "url": "/d/CYboCliVk/district-owners-with-no-first-or-last-name",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2022-08-18T09:40:48Z",
+        "updated": "2022-08-30T15:37:20Z",
+        "updatedBy": "gmasucci@twigeducation.com",
+        "createdBy": "gmasucci@twigeducation.com",
+        "version": 26,
+        "hasAcl": false,
+        "isFolder": false,
+        "folderId": 38,
+        "folderUid": "CP3_Oum4z",
+        "folderTitle": "Rostering",
+        "folderUrl": "/dashboards/f/CP3_Oum4z/rostering",
+        "provisioned": false,
+        "provisionedExternalId": "",
+        "annotationsPermissions": {
+            "dashboard": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            },
+            "organization": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            }
+        },
+        "publicDashboardAccessToken": "",
+        "publicDashboardEnabled": false
+    },
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": "-- Grafana --",
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "target": {
+                        "limit": 100,
+                        "matchAny": false,
+                        "tags": [],
+                        "type": "dashboard"
+                    },
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "fiscalYearStartMonth": 0,
+        "graphTooltip": 0,
+        "id": 36,
+        "iteration": 1661873821096,
+        "links": [],
+        "liveNow": false,
+        "panels": [
+            {
+                "datasource": {
+                    "type": "postgres",
+                    "uid": "QalHUc67k"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "thresholds"
+                        },
+                        "custom": {
+                            "align": "auto",
+                            "displayMode": "auto",
+                            "filterable": true
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 19,
+                    "w": 24,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 2,
+                "options": {
+                    "footer": {
+                        "fields": "",
+                        "reducer": [
+                            "sum"
+                        ],
+                        "show": false
+                    },
+                    "frameIndex": 0,
+                    "showHeader": true
+                },
+                "pluginVersion": "8.3.4",
+                "targets": [
+                    {
+                        "datasource": {
+                            "type": "postgres",
+                            "uid": "QalHUc67k"
+                        },
+                        "format": "table",
+                        "group": [],
+                        "metricColumn": "none",
+                        "rawQuery": true,
+                        "rawSql": "select pu.id, pu.first_name, pu.last_name, pu.email, pu.username, pu.district_id, pd.name, pd.short_code from profiles_user pu \njoin profiles_district pd on pu.district_id = pd.id\nwhere pu.role in ('DISTRICT_OWNER')\nand pu.first_name in (NULL, '')\nand pu.last_name in (NULL, '')\nand pd.is_automated_test_district = 'FALSE'\nand lower(pd.name) not like '%test%'\nand lower(pd.name) not like '%lost%'\nand pd.name not like 'TRIAL%';",
+                        "refId": "A",
+                        "select": [
+                            [
+                                {
+                                    "params": [
+                                        "value"
+                                    ],
+                                    "type": "column"
+                                }
+                            ]
+                        ],
+                        "timeColumn": "time",
+                        "where": [
+                            {
+                                "name": "$__timeFilter",
+                                "params": [],
+                                "type": "macro"
+                            }
+                        ]
+                    }
+                ],
+                "title": "District Owners with no 1st or last name: $daoCount",
+                "type": "table"
+            }
+        ],
+        "refresh": "",
+        "schemaVersion": 34,
+        "style": "dark",
+        "tags": [
+            "rostering",
+            "analytics"
+        ],
+        "templating": {
+            "list": [
+                {
+                    "current": {
+                        "selected": false,
+                        "text": "16",
+                        "value": "16"
+                    },
+                    "datasource": {
+                        "type": "postgres",
+                        "uid": "QalHUc67k"
+                    },
+                    "definition": "select count(*) from profiles_user pu \njoin profiles_district pd on pu.district_id = pd.id\nwhere pu.role in ('DISTRICT_OWNER')\nand pu.first_name in (NULL, '')\nand pu.last_name in (NULL, '')\nand pd.is_automated_test_district = 'FALSE'\nand lower(pd.name) not like '%test%'\nand lower(pd.name) not like '%lost%'\nand pd.name not like 'TRIAL%';",
+                    "hide": 2,
+                    "includeAll": false,
+                    "multi": false,
+                    "name": "daoCount",
+                    "options": [],
+                    "query": "select count(*) from profiles_user pu \njoin profiles_district pd on pu.district_id = pd.id\nwhere pu.role in ('DISTRICT_OWNER')\nand pu.first_name in (NULL, '')\nand pu.last_name in (NULL, '')\nand pd.is_automated_test_district = 'FALSE'\nand lower(pd.name) not like '%test%'\nand lower(pd.name) not like '%lost%'\nand pd.name not like 'TRIAL%';",
+                    "refresh": 1,
+                    "regex": "",
+                    "skipUrlSync": false,
+                    "sort": 0,
+                    "type": "query"
+                }
+            ]
+        },
+        "time": {
+            "from": "now-6h",
+            "to": "now"
+        },
+        "timepicker": {
+            "hidden": true
+        },
+        "timezone": "",
+        "title": "District Owners with no first or last name",
+        "uid": "CYboCliVk",
+        "version": 26,
+        "weekStart": ""
+    }
+}
